@@ -392,8 +392,12 @@ public class PipTouchHandler {
                     event.setSourceNodeId(AccessibilityNodeInfo.ROOT_NODE_ID);
                     event.setWindowId(
                             AccessibilityWindowInfo.PICTURE_IN_PICTURE_ACTION_REPLACER_WINDOW_ID);
-                    mAccessibilityManager.sendAccessibilityEvent(event);
-                    mSendingHoverAccessibilityEvents = true;
+                    try {
+                        mAccessibilityManager.sendAccessibilityEvent(event);
+                        mSendingHoverAccessibilityEvents = true;
+                    } catch (IllegalStateException e) {
+                        // Accessibility is off.
+                    }
                 }
                 break;
             }
@@ -405,8 +409,12 @@ public class PipTouchHandler {
                     event.setSourceNodeId(AccessibilityNodeInfo.ROOT_NODE_ID);
                     event.setWindowId(
                             AccessibilityWindowInfo.PICTURE_IN_PICTURE_ACTION_REPLACER_WINDOW_ID);
-                    mAccessibilityManager.sendAccessibilityEvent(event);
-                    mSendingHoverAccessibilityEvents = false;
+                    try {
+                        mAccessibilityManager.sendAccessibilityEvent(event);
+                        mSendingHoverAccessibilityEvents = false;
+                    } catch (IllegalStateException e) {
+                        // Accessibility is off.
+                    }
                 }
                 break;
             }
