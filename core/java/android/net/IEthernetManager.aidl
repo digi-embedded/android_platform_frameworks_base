@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2018 Digi International Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,4 +32,11 @@ interface IEthernetManager
     boolean isAvailable();
     void addListener(in IEthernetServiceListener listener);
     void removeListener(in IEthernetServiceListener listener);
+    String[] listInterfaces();
+    void setEnabled(String iface, boolean enable);
+    boolean isEnabled(String iface);
+    String getInterfaceName();
+    boolean isConnected();
+    void resetInterface();
+    String getMacAddress();
 }

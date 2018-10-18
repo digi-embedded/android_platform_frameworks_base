@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2018 Digi International Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,6 +153,102 @@ public class EthernetManager {
             } catch (RemoteException e) {
                 throw e.rethrowFromSystemServer();
             }
+        }
+    }
+
+    /**
+     * Returns the Ethernet interface name.
+     *
+     * @return The Ethernet interface name, {@code null} if there is not any
+     *         interface.
+     */
+    public String getInterfaceName() {
+        try {
+            return mService.getInterfaceName();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Returns whether the Ethernet interface is connected or not.
+     *
+     * @return {@code true} if connected, {@code false} otherwise.
+     */
+    public boolean isConnected() {
+        try {
+            return mService.isConnected();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Resets the Ethernet interface.
+     */
+    public void resetInterface() {
+        try {
+            mService.resetInterface();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Reads the MAC address of the Ethernet interface.
+     *
+     * @return The MAC address or {@code null} if could not be read.
+     *
+     * @throws NullPointerException If the configured interface is null.
+     */
+    public String getMacAddress() {
+        try {
+            return mService.getMacAddress();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Returns a list with the Ethernet interfaces.
+     *
+     * @return A list with the Ethernet interfaces.
+     */
+    public String[] listInterfaces() {
+        try {
+            return mService.listInterfaces();
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Enables or disables the given interface.
+     *
+     * @param iface Ethernet interface.
+     * @param enable {@code true} to enable it, {@code false} to disable it.
+     */
+    public void setEnabled(String iface, boolean enable) {
+        try {
+            mService.setEnabled(iface, enable);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Returns whether the interface is enabled or not.
+     *
+     * @param iface Ethernet interface.
+     *
+     * @return {@code true} if the interface is enabled, {@code false}
+     *         otherwise.
+     */
+    public boolean isEnabled(String iface) {
+        try {
+            return mService.isEnabled(iface);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
         }
     }
 }
