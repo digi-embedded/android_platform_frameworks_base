@@ -1569,6 +1569,18 @@
         android:protectionLevel="signature|privileged" />
 
     <!-- =========================================== -->
+    <!-- Permissions associated with Digi hardware   -->
+    <!-- =========================================== -->
+    <eat-comment />
+
+    <!-- Allows access to system GPIO. -->
+    <permission android:name="com.digi.android.permission.GPIO"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_gpio"
+        android:description="@string/permdesc_gpio" />
+
+    <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->
     <eat-comment />

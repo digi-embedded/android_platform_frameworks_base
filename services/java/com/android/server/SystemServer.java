@@ -200,6 +200,8 @@ public final class SystemServer {
             "com.android.server.wallpaper.WallpaperManagerService$Lifecycle";
     private static final String AUTO_FILL_MANAGER_SERVICE_CLASS =
             "com.android.server.autofill.AutofillManagerService";
+    private static final String GPIO_SERVICE_CLASS =
+            "com.android.server.gpio.GPIOService";
 
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
@@ -1193,6 +1195,10 @@ public final class SystemServer {
                 }
                 traceEnd();
             }
+
+            traceBeginAndSlog("StartGPIO");
+            mSystemServiceManager.startService(GPIO_SERVICE_CLASS);
+            traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {
                 traceBeginAndSlog("StartSearchManagerService");

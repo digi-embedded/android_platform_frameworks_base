@@ -935,6 +935,7 @@ android.ddm.DdmHandleProfiling
 android.ddm.DdmHandleThread
 android.ddm.DdmHandleViewDebug
 android.ddm.DdmRegister
+android.gpio.GPIOHandler
 android.graphics.-$Lambda$ZrP-zejiEXAqfwV-MyP5lE9mYC8
 android.graphics.-$Lambda$ZrP-zejiEXAqfwV-MyP5lE9mYC8$1
 android.graphics.-$Lambda$ZrP-zejiEXAqfwV-MyP5lE9mYC8$2

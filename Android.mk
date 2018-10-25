@@ -177,6 +177,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/content/pm/IShortcutService.aidl \
 	core/java/android/content/pm/permission/IRuntimePermissionPresenter.aidl \
 	core/java/android/database/IContentObserver.aidl \
+	core/java/android/gpio/IGPIOManager.aidl \
 	../av/camera/aidl/android/hardware/ICameraService.aidl \
 	../av/camera/aidl/android/hardware/ICameraServiceListener.aidl \
 	../av/camera/aidl/android/hardware/ICameraServiceProxy.aidl \

@@ -40,6 +40,8 @@ import android.content.pm.IShortcutService;
 import android.content.pm.LauncherApps;
 import android.content.pm.ShortcutManager;
 import android.content.res.Resources;
+import android.gpio.GPIOHandler;
+import android.gpio.IGPIOManager;
 import android.hardware.ConsumerIrManager;
 import android.hardware.ISerialManager;
 import android.hardware.SensorManager;
@@ -869,6 +871,19 @@ final class SystemServiceRegistry {
             public VrManager createService(ContextImpl ctx) throws ServiceNotFoundException {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.VR_SERVICE);
                 return new VrManager(IVrManager.Stub.asInterface(b));
+            }
+        });
+
+	/**
+	 * Digi Services
+	 */
+        registerService(Context.GPIO_SERVICE, GPIOHandler.class,
+		new CachedServiceFetcher<GPIOHandler>() {
+            @Override
+            public GPIOHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.GPIO_SERVICE);
+                IGPIOManager service = IGPIOManager.Stub.asInterface(b);
+                return new GPIOHandler(ctx.getOuterContext(), service);
             }
         });
     }

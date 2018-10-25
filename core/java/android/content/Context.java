@@ -3287,6 +3287,17 @@ public abstract class Context {
     public static final String LOCATION_SERVICE = "location";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.gpio.GPIOHandler} for controlling GPIOs.
+     *
+     * @see #getSystemService
+     * @see android.gpio.GPIOHandler
+     *
+     * @hide
+     */
+    public static final String GPIO_SERVICE = "gpio";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.
