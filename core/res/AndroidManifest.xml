@@ -1580,6 +1580,13 @@
         android:label="@string/permlab_gpio"
         android:description="@string/permdesc_gpio" />
 
+    <!-- Allows access to system ADC. -->
+    <permission android:name="com.digi.android.permission.ADC"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_adc"
+        android:description="@string/permdesc_adc" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

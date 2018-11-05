@@ -3298,6 +3298,17 @@ public abstract class Context {
     public static final String GPIO_SERVICE = "gpio";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.adc.ADCHandler} for sampling ADCs.
+     *
+     * @see #getSystemService
+     * @see android.adc.ADCHandler
+     *
+     * @hide
+     */
+    public static final String ADC_SERVICE = "adc";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

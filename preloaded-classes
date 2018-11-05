@@ -323,6 +323,7 @@ android.accounts.IAccountManagerResponse
 android.accounts.IAccountManagerResponse$Stub
 android.accounts.OnAccountsUpdateListener
 android.accounts.OperationCanceledException
+android.adc.ADCHandler
 android.animation.AnimationHandler
 android.animation.AnimationHandler$1
 android.animation.AnimationHandler$AnimationFrameCallback

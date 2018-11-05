@@ -202,6 +202,8 @@ public final class SystemServer {
             "com.android.server.autofill.AutofillManagerService";
     private static final String GPIO_SERVICE_CLASS =
             "com.android.server.gpio.GPIOService";
+    private static final String ADC_SERVICE_CLASS =
+            "com.android.server.adc.ADCService";
 
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
@@ -1198,6 +1200,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartGPIO");
             mSystemServiceManager.startService(GPIO_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartADC");
+            mSystemServiceManager.startService(ADC_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {

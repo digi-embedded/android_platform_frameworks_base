@@ -18,6 +18,8 @@ package android.app;
 
 import android.accounts.AccountManager;
 import android.accounts.IAccountManager;
+import android.adc.ADCHandler;
+import android.adc.IADCManager;
 import android.app.admin.DevicePolicyManager;
 import android.app.admin.IDevicePolicyManager;
 import android.app.job.IJobScheduler;
@@ -874,18 +876,30 @@ final class SystemServiceRegistry {
             }
         });
 
-	/**
-	 * Digi Services
-	 */
+        /**
+         * Digi Services
+         */
         registerService(Context.GPIO_SERVICE, GPIOHandler.class,
-		new CachedServiceFetcher<GPIOHandler>() {
-            @Override
-            public GPIOHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
-                IBinder b = ServiceManager.getServiceOrThrow(Context.GPIO_SERVICE);
-                IGPIOManager service = IGPIOManager.Stub.asInterface(b);
-                return new GPIOHandler(ctx.getOuterContext(), service);
+            new CachedServiceFetcher<GPIOHandler>() {
+                @Override
+                public GPIOHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                    IBinder b = ServiceManager.getServiceOrThrow(Context.GPIO_SERVICE);
+                    IGPIOManager service = IGPIOManager.Stub.asInterface(b);
+                    return new GPIOHandler(ctx.getOuterContext(), service);
+                }
             }
-        });
+        );
+
+        registerService(Context.ADC_SERVICE, ADCHandler.class,
+            new CachedServiceFetcher<ADCHandler>() {
+                @Override
+                public ADCHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                    IBinder b = ServiceManager.getServiceOrThrow(Context.ADC_SERVICE);
+                    IADCManager service = IADCManager.Stub.asInterface(b);
+                    return new ADCHandler(ctx.getOuterContext(), service);
+                }
+            }
+        );
     }
 
     /**
