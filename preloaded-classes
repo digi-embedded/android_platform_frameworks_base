@@ -2096,6 +2096,7 @@ android.service.persistentdata.IPersistentDataBlockService
 android.service.persistentdata.IPersistentDataBlockService$Stub
 android.service.persistentdata.IPersistentDataBlockService$Stub$Proxy
 android.service.persistentdata.PersistentDataBlockManager
+android.spi.SPIHandler
 android.system.ErrnoException
 android.system.GaiException
 android.system.NetlinkSocketAddress

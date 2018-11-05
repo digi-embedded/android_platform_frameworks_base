@@ -1594,6 +1594,13 @@
         android:label="@string/permlab_gpu"
         android:description="@string/permdesc_gpu" />
 
+    <!-- Allows access to system SPI. -->
+    <permission android:name="com.digi.android.permission.SPI"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_spi"
+        android:description="@string/permdesc_spi" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

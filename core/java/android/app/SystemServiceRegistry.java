@@ -126,6 +126,8 @@ import android.service.oemlock.OemLockManager;
 import android.service.persistentdata.IPersistentDataBlockService;
 import android.service.persistentdata.PersistentDataBlockManager;
 import android.service.vr.IVrManager;
+import android.spi.SPIHandler;
+import android.spi.ISPIManager;
 import android.system.gpu.GPUHandler;
 import android.system.gpu.IGPUManager;
 import android.telecom.TelecomManager;
@@ -882,37 +884,44 @@ final class SystemServiceRegistry {
          * Digi Services
          */
         registerService(Context.GPIO_SERVICE, GPIOHandler.class,
-            new CachedServiceFetcher<GPIOHandler>() {
-                @Override
-                public GPIOHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
-                    IBinder b = ServiceManager.getServiceOrThrow(Context.GPIO_SERVICE);
-                    IGPIOManager service = IGPIOManager.Stub.asInterface(b);
-                    return new GPIOHandler(ctx.getOuterContext(), service);
-                }
+                new CachedServiceFetcher<GPIOHandler>() {
+            @Override
+            public GPIOHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.GPIO_SERVICE);
+                IGPIOManager service = IGPIOManager.Stub.asInterface(b);
+                return new GPIOHandler(ctx.getOuterContext(), service);
             }
-        );
+        });
 
         registerService(Context.ADC_SERVICE, ADCHandler.class,
-            new CachedServiceFetcher<ADCHandler>() {
-                @Override
-                public ADCHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
-                    IBinder b = ServiceManager.getServiceOrThrow(Context.ADC_SERVICE);
-                    IADCManager service = IADCManager.Stub.asInterface(b);
-                    return new ADCHandler(ctx.getOuterContext(), service);
-                }
+                new CachedServiceFetcher<ADCHandler>() {
+            @Override
+            public ADCHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.ADC_SERVICE);
+                IADCManager service = IADCManager.Stub.asInterface(b);
+                return new ADCHandler(ctx.getOuterContext(), service);
             }
-        );
+        });
 
         registerService(Context.GPU_SERVICE, GPUHandler.class,
-             new CachedServiceFetcher<GPUHandler>() {
-                @Override
-                public GPUHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
-                    IBinder b = ServiceManager.getServiceOrThrow(Context.GPU_SERVICE);
-                    IGPUManager service = IGPUManager.Stub.asInterface(b);
-                    return new GPUHandler(ctx.getOuterContext(), service);
-                }
+                 new CachedServiceFetcher<GPUHandler>() {
+            @Override
+            public GPUHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.GPU_SERVICE);
+                IGPUManager service = IGPUManager.Stub.asInterface(b);
+                return new GPUHandler(ctx.getOuterContext(), service);
             }
-        );
+        });
+
+        registerService(Context.SPI_SERVICE, SPIHandler.class,
+                new CachedServiceFetcher<SPIHandler>() {
+            @Override
+            public SPIHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.SPI_SERVICE);
+                ISPIManager service = ISPIManager.Stub.asInterface(b);
+                return new SPIHandler(ctx.getOuterContext(), service);
+            }
+        });
     }
 
     /**

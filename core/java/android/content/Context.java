@@ -3320,6 +3320,17 @@ public abstract class Context {
     public static final String GPU_SERVICE = "gpu_freq";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.spi.SPIHandler} for controlling SPI access.
+     *
+     * @see #getSystemService
+     * @see android.spi.SPIHandler
+     * 
+     * @hide
+     */
+    public static final String SPI_SERVICE = "spi";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

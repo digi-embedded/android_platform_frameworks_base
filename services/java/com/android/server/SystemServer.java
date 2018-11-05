@@ -206,6 +206,8 @@ public final class SystemServer {
             "com.android.server.adc.ADCService";
     private static final String GPU_SERVICE_CLASS =
             "com.android.server.system.gpu.GPUService";
+    private static final String SPI_SERVICE_CLASS =
+            "com.android.server.spi.SPIService";
 
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
@@ -379,6 +381,7 @@ public final class SystemServer {
 
             // Initialize native services.
             System.loadLibrary("android_servers");
+            System.loadLibrary("digiservices");
 
             // Check whether we failed to shut down last time we tried.
             // This call may not return.
@@ -1210,6 +1213,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartGPU");
             mSystemServiceManager.startService(GPU_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartSPI");
+            mSystemServiceManager.startService(SPI_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {
