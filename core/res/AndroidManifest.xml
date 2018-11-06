@@ -1587,6 +1587,13 @@
         android:label="@string/permlab_adc"
         android:description="@string/permdesc_adc" />
 
+    <!-- Allows access to system GPU. -->
+    <permission android:name="com.digi.android.permission.GPU"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_gpu"
+        android:description="@string/permdesc_gpu" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

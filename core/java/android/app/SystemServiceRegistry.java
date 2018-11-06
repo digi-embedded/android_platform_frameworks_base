@@ -126,6 +126,8 @@ import android.service.oemlock.OemLockManager;
 import android.service.persistentdata.IPersistentDataBlockService;
 import android.service.persistentdata.PersistentDataBlockManager;
 import android.service.vr.IVrManager;
+import android.system.gpu.GPUHandler;
+import android.system.gpu.IGPUManager;
 import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
@@ -897,6 +899,17 @@ final class SystemServiceRegistry {
                     IBinder b = ServiceManager.getServiceOrThrow(Context.ADC_SERVICE);
                     IADCManager service = IADCManager.Stub.asInterface(b);
                     return new ADCHandler(ctx.getOuterContext(), service);
+                }
+            }
+        );
+
+        registerService(Context.GPU_SERVICE, GPUHandler.class,
+             new CachedServiceFetcher<GPUHandler>() {
+                @Override
+                public GPUHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                    IBinder b = ServiceManager.getServiceOrThrow(Context.GPU_SERVICE);
+                    IGPUManager service = IGPUManager.Stub.asInterface(b);
+                    return new GPUHandler(ctx.getOuterContext(), service);
                 }
             }
         );

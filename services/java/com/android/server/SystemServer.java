@@ -204,6 +204,8 @@ public final class SystemServer {
             "com.android.server.gpio.GPIOService";
     private static final String ADC_SERVICE_CLASS =
             "com.android.server.adc.ADCService";
+    private static final String GPU_SERVICE_CLASS =
+            "com.android.server.system.gpu.GPUService";
 
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
@@ -1204,6 +1206,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartADC");
             mSystemServiceManager.startService(ADC_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartGPU");
+            mSystemServiceManager.startService(GPU_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {

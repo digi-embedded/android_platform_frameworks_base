@@ -3309,6 +3309,17 @@ public abstract class Context {
     public static final String ADC_SERVICE = "adc";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.system.gpu.GPUHandler} for controlling system GPU access.
+     *
+     * @see #getSystemService
+     * @see android.system.gpu.GPUHandler
+     *
+     * @hide
+     */
+    public static final String GPU_SERVICE = "gpu_freq";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

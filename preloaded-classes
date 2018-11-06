@@ -2116,6 +2116,7 @@ android.system.StructTimeval
 android.system.StructUcred
 android.system.StructUtsname
 android.system.UnixSocketAddress
+android.system.gpu.GPUHandler
 android.telecom.TelecomManager
 android.telephony.CarrierConfigManager
 android.telephony.CellIdentityWcdma
