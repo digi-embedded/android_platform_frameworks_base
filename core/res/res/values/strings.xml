@@ -1493,6 +1493,11 @@
     <string name="permdesc_adc">Allows the app to access system ADC.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_cpu">access system CPU</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_cpu">Allows the app to access system CPU.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_gpio">access system GPIO</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_gpio">Allows the app to access system GPIO.</string>

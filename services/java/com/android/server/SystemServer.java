@@ -204,6 +204,8 @@ public final class SystemServer {
             "com.android.server.gpio.GPIOService";
     private static final String ADC_SERVICE_CLASS =
             "com.android.server.adc.ADCService";
+    private static final String CPU_SERVICE_CLASS =
+            "com.android.server.system.cpu.CPUService";
     private static final String GPU_SERVICE_CLASS =
             "com.android.server.system.gpu.GPUService";
     private static final String SPI_SERVICE_CLASS =
@@ -1211,6 +1213,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartADC");
             mSystemServiceManager.startService(ADC_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartCPU");
+            mSystemServiceManager.startService(CPU_SERVICE_CLASS);
             traceEnd();
 
             traceBeginAndSlog("StartGPU");

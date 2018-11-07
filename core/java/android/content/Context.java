@@ -3288,6 +3288,18 @@ public abstract class Context {
 
     /**
      * Use with {@link #getSystemService} to retrieve a {@link
+     * android.system.cpu.CPUHandler} to manage the CPU configuration and
+     * frequency.
+     *
+     * @see #getSystemService
+     * @see android.cpu.pm.CPUHandler
+     *
+     * @hide
+     */
+    public static final String CPU_SERVICE = "cpu";
+
+    /**
+     * Use with {@link #getSystemService} to retrieve a {@link
      * android.gpio.GPIOHandler} for controlling GPIOs.
      *
      * @see #getSystemService

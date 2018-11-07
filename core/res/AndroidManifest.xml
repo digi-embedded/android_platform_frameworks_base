@@ -1573,6 +1573,13 @@
     <!-- =========================================== -->
     <eat-comment />
 
+    <!-- Allows access to system CPU. -->
+    <permission android:name="com.digi.android.permission.CPU"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_cpu"
+        android:description="@string/permdesc_cpu" />
+
     <!-- Allows access to system GPIO. -->
     <permission android:name="com.digi.android.permission.GPIO"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"

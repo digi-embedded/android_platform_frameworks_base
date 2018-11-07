@@ -130,6 +130,8 @@ import android.service.persistentdata.PersistentDataBlockManager;
 import android.service.vr.IVrManager;
 import android.spi.SPIHandler;
 import android.spi.ISPIManager;
+import android.system.cpu.CPUHandler;
+import android.system.cpu.ICPUManager;
 import android.system.gpu.GPUHandler;
 import android.system.gpu.IGPUManager;
 import android.telecom.TelecomManager;
@@ -932,6 +934,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.I2C_SERVICE);
                 II2CManager service = II2CManager.Stub.asInterface(b);
                 return new I2CHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.CPU_SERVICE, CPUHandler.class,
+            new CachedServiceFetcher<CPUHandler>() {
+            @Override
+            public CPUHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.CPU_SERVICE);
+                ICPUManager service = ICPUManager.Stub.asInterface(b);
+                return new CPUHandler(ctx.getOuterContext(), service);
             }
         });
     }
