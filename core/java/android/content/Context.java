@@ -3333,6 +3333,18 @@ public abstract class Context {
 
     /**
      * Use with {@link #getSystemService} to retrieve a {@link
+     * android.system.memory.MemoryHandler} for controlling system
+     * memory access.
+     *
+     * @see #getSystemService
+     * @see android.system.memory.MemoryHandler
+     *
+     * @hide
+     */
+    public static final String MEMORY_SERVICE = "memory";
+
+    /**
+     * Use with {@link #getSystemService} to retrieve a {@link
      * android.spi.SPIHandler} for controlling SPI access.
      *
      * @see #getSystemService

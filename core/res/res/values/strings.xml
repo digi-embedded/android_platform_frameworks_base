@@ -1497,6 +1497,11 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_cpu">Allows the app to access system CPU.</string>
 
+   <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_memory">access system Memory</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_memory">Allows the app to access system Memory.</string>
+
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_cpu_temperature">access CPU temperature</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->

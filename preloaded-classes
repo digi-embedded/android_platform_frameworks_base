@@ -2121,6 +2121,7 @@ android.system.UnixSocketAddress
 android.system.cpu.CPUHandler
 android.system.cpu.CPUTemperatureListenerImpl
 android.system.gpu.GPUHandler
+android.system.memory.MemoryHandler
 android.telecom.TelecomManager
 android.telephony.CarrierConfigManager
 android.telephony.CellIdentityWcdma

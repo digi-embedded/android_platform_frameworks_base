@@ -208,6 +208,8 @@ public final class SystemServer {
             "com.android.server.system.cpu.CPUService";
     private static final String GPU_SERVICE_CLASS =
             "com.android.server.system.gpu.GPUService";
+    private static final String MEMORY_SERVICE_CLASS =
+            "com.android.server.system.memory.MemoryService";
     private static final String SPI_SERVICE_CLASS =
             "com.android.server.spi.SPIService";
     private static final String I2C_SERVICE_CLASS =
@@ -1229,6 +1231,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartI2C");
             mSystemServiceManager.startService(I2C_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartMemory");
+            mSystemServiceManager.startService(MEMORY_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {

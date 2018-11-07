@@ -134,6 +134,8 @@ import android.system.cpu.CPUHandler;
 import android.system.cpu.ICPUManager;
 import android.system.gpu.GPUHandler;
 import android.system.gpu.IGPUManager;
+import android.system.memory.MemoryHandler;
+import android.system.memory.IMemoryManager;
 import android.telecom.TelecomManager;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SubscriptionManager;
@@ -944,6 +946,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.CPU_SERVICE);
                 ICPUManager service = ICPUManager.Stub.asInterface(b);
                 return new CPUHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.MEMORY_SERVICE, MemoryHandler.class,
+            new CachedServiceFetcher<MemoryHandler>() {
+            @Override
+            public MemoryHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.MEMORY_SERVICE);
+                IMemoryManager service = IMemoryManager.Stub.asInterface(b);
+                return new MemoryHandler(ctx.getOuterContext(), service);
             }
         });
     }

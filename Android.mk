@@ -377,6 +377,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/system/cpu/ICPUManager.aidl \
 	core/java/android/system/cpu/ICPUTemperatureListener.aidl \
 	core/java/android/system/gpu/IGPUManager.aidl \
+	core/java/android/system/memory/IMemoryManager.aidl \
 	core/java/com/android/internal/app/IAppOpsCallback.aidl \
 	core/java/com/android/internal/app/IAppOpsService.aidl \
 	core/java/com/android/internal/app/IAssistScreenshotReceiver.aidl \
