@@ -60,6 +60,8 @@ import android.hardware.location.ContextHubManager;
 import android.hardware.radio.RadioManager;
 import android.hardware.usb.IUsbManager;
 import android.hardware.usb.UsbManager;
+import android.i2c.I2CHandler;
+import android.i2c.II2CManager;
 import android.location.CountryDetector;
 import android.location.ICountryDetector;
 import android.location.ILocationManager;
@@ -920,6 +922,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.SPI_SERVICE);
                 ISPIManager service = ISPIManager.Stub.asInterface(b);
                 return new SPIHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.I2C_SERVICE, I2CHandler.class,
+                new CachedServiceFetcher<I2CHandler>() {
+            @Override
+            public I2CHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.I2C_SERVICE);
+                II2CManager service = II2CManager.Stub.asInterface(b);
+                return new I2CHandler(ctx.getOuterContext(), service);
             }
         });
     }

@@ -1601,6 +1601,13 @@
         android:label="@string/permlab_spi"
         android:description="@string/permdesc_spi" />
 
+    <!-- Allows access to system I2C. -->
+    <permission android:name="com.digi.android.permission.I2C"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_i2c"
+        android:description="@string/permdesc_i2c" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

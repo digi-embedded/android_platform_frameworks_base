@@ -3331,6 +3331,17 @@ public abstract class Context {
     public static final String SPI_SERVICE = "spi";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.i2c.I2CHandler} for controlling I2C access.
+     *
+     * @see #getSystemService
+     * @see android.i2c.I2CHandler
+     * 
+     * @hide
+     */
+    public static final String I2C_SERVICE = "i2c";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.
