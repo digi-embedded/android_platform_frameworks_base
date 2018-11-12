@@ -32,6 +32,8 @@ import android.app.usage.StorageStatsManager;
 import android.app.usage.UsageStatsManager;
 import android.appwidget.AppWidgetManager;
 import android.bluetooth.BluetoothManager;
+import android.can.CANHandler;
+import android.can.ICANManager;
 import android.companion.CompanionDeviceManager;
 import android.companion.ICompanionDeviceManager;
 import android.content.ClipboardManager;
@@ -956,6 +958,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.MEMORY_SERVICE);
                 IMemoryManager service = IMemoryManager.Stub.asInterface(b);
                 return new MemoryHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.CAN_SERVICE, CANHandler.class,
+                new CachedServiceFetcher<CANHandler>() {
+            @Override
+            public CANHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.CAN_SERVICE);
+                ICANManager service = ICANManager.Stub.asInterface(b);
+                return new CANHandler(ctx.getOuterContext(), service);
             }
         });
     }

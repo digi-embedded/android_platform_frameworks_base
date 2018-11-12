@@ -214,6 +214,8 @@ public final class SystemServer {
             "com.android.server.spi.SPIService";
     private static final String I2C_SERVICE_CLASS =
             "com.android.server.i2c.I2CService";
+    private static final String CAN_SERVICE_CLASS =
+            "com.android.server.can.CANService";
 
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
@@ -1235,6 +1237,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartMemory");
             mSystemServiceManager.startService(MEMORY_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartCAN");
+            mSystemServiceManager.startService(CAN_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {

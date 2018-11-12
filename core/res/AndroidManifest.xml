@@ -1630,6 +1630,13 @@
         android:label="@string/permlab_cpu_temperature"
         android:description="@string/permdesc_cpu_temperature" />
 
+    <!-- Allows access to system CAN. -->
+    <permission android:name="com.digi.android.permission.CAN"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_can"
+        android:description="@string/permdesc_can" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

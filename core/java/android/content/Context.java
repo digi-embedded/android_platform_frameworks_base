@@ -3366,6 +3366,17 @@ public abstract class Context {
     public static final String I2C_SERVICE = "i2c";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.can.CANHandler} for controlling CAN access.
+     *
+     * @see #getSystemService
+     * @see android.can.CANHandler
+     * 
+     * @hide
+     */
+    public static final String CAN_SERVICE = "can";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

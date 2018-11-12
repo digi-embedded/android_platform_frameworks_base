@@ -712,6 +712,7 @@ android.bluetooth.IBluetoothProfileServiceConnection
 android.bluetooth.IBluetoothProfileServiceConnection$Stub
 android.bluetooth.IBluetoothStateChangeCallback
 android.bluetooth.IBluetoothStateChangeCallback$Stub
+android.can.CANHandler
 android.companion.CompanionDeviceManager
 android.content.AbstractThreadedSyncAdapter
 android.content.AbstractThreadedSyncAdapter$ISyncAdapterImpl
