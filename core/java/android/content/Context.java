@@ -3300,6 +3300,18 @@ public abstract class Context {
 
     /**
      * Use with {@link #getSystemService} to retrieve a {@link
+     * android.firmwareupdate.FirmwareUpdateHandler} to perform firmware update
+     * related operations.
+     *
+     * @see #getSystemService
+     * @see android.firmwareupdate.FirmwareUpdateHandler
+     *
+     * @hide
+     */
+    public static final String FIRMWARE_UPDATE_SERVICE = "firmware_update";
+
+    /**
+     * Use with {@link #getSystemService} to retrieve a {@link
      * android.gpio.GPIOHandler} for controlling GPIOs.
      *
      * @see #getSystemService
@@ -3349,7 +3361,7 @@ public abstract class Context {
      *
      * @see #getSystemService
      * @see android.spi.SPIHandler
-     * 
+     *
      * @hide
      */
     public static final String SPI_SERVICE = "spi";
@@ -3360,7 +3372,7 @@ public abstract class Context {
      *
      * @see #getSystemService
      * @see android.i2c.I2CHandler
-     * 
+     *
      * @hide
      */
     public static final String I2C_SERVICE = "i2c";
@@ -3371,7 +3383,7 @@ public abstract class Context {
      *
      * @see #getSystemService
      * @see android.can.CANHandler
-     * 
+     *
      * @hide
      */
     public static final String CAN_SERVICE = "can";

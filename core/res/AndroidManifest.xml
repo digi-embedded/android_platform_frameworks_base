@@ -1622,6 +1622,13 @@
         android:label="@string/permlab_memory"
         android:description="@string/permdesc_memory" />
 
+    <!-- Allows access to system Firmware Update. -->
+    <permission android:name="com.digi.android.permission.FIRMWARE_UPDATE"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_firmware_update"
+        android:description="@string/permdesc_firmware_update" />
+
     <!-- Allows access to system CPU temperature.
          @deprecated The API that used this permission has been deprecated. -->
     <permission android:name="com.digi.android.permission.CPU_TEMPERATURE"

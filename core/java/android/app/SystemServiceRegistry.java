@@ -44,6 +44,8 @@ import android.content.pm.IShortcutService;
 import android.content.pm.LauncherApps;
 import android.content.pm.ShortcutManager;
 import android.content.res.Resources;
+import android.firmwareupdate.IFirmwareUpdateManager;
+import android.firmwareupdate.FirmwareUpdateHandler;
 import android.gpio.GPIOHandler;
 import android.gpio.IGPIOManager;
 import android.hardware.ConsumerIrManager;
@@ -992,6 +994,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.WATCHDOG_SERVICE);
                 IWatchdogManager service = IWatchdogManager.Stub.asInterface(b);
                 return new WatchdogHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.FIRMWARE_UPDATE_SERVICE, FirmwareUpdateHandler.class,
+            new CachedServiceFetcher<FirmwareUpdateHandler>() {
+            @Override
+            public FirmwareUpdateHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.FIRMWARE_UPDATE_SERVICE);
+                IFirmwareUpdateManager service = IFirmwareUpdateManager.Stub.asInterface(b);
+                return new FirmwareUpdateHandler(ctx.getOuterContext(), service);
             }
         });
     }

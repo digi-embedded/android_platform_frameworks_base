@@ -179,6 +179,8 @@ LOCAL_SRC_FILES += \
 	core/java/android/content/pm/permission/IRuntimePermissionPresenter.aidl \
 	core/java/android/database/IContentObserver.aidl \
 	core/java/android/can/ICANManager.aidl \
+	core/java/android/firmwareupdate/IFirmwareUpdateManager.aidl \
+	core/java/android/firmwareupdate/IFirmwareUpdateListener.aidl \
 	core/java/android/gpio/IGPIOManager.aidl \
 	core/java/android/spi/ISPIManager.aidl \
 	core/java/android/i2c/II2CManager.aidl \

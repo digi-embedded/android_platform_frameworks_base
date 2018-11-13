@@ -206,6 +206,8 @@ public final class SystemServer {
             "com.android.server.adc.ADCService";
     private static final String CPU_SERVICE_CLASS =
             "com.android.server.system.cpu.CPUService";
+    private static final String FIRMWARE_UPDATE_SERVICE_CLASS =
+            "com.android.server.firmwareupdate.FirmwareUpdateService";
     private static final String GPU_SERVICE_CLASS =
             "com.android.server.system.gpu.GPUService";
     private static final String MEMORY_SERVICE_CLASS =
@@ -1253,6 +1255,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartWatchdog");
             mSystemServiceManager.startService(WATCHDOG_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartFirmwareUpdate");
+            mSystemServiceManager.startService(FIRMWARE_UPDATE_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {

@@ -1,0 +1,86 @@
+/*
+ * Copyright (C) 2016-2018 Digi International Inc., All Rights Reserved
+ *
+ * This software contains proprietary and confidential information of Digi.
+ * International Inc. By accepting transfer of this copy, Recipient agrees
+ * to retain this software in confidence, to prevent disclosure to others,
+ * and to make no use of this software other than that for which it was
+ * delivered. This is an unpublished copyrighted work of Digi International
+ * Inc. Except as permitted by federal law, 17 USC 117, copying is strictly
+ * prohibited.
+ *
+ * Restricted Rights Legend
+ *
+ * Use, duplication, or disclosure by the Government is subject to restrictions
+ * set forth in sub-paragraph (c)(1)(ii) of The Rights in Technical Data and
+ * Computer Software clause at DFARS 252.227-7031 or subparagraphs (c)(1) and
+ * (2) of the Commercial Computer Software - Restricted Rights at 48 CFR
+ * 52.227-19, as applicable.
+ *
+ * Digi International Inc. 11001 Bren Road East, Minnetonka, MN 55343
+ */
+
+package android.firmwareupdate;
+
+/**
+ * This interface defines the required methods that should be implemented to
+ * receive firmware update progress from the firmware update service.
+ *
+ * @hide
+ */
+public interface FirmwareUpdateListenerImpl {
+
+    /**
+     * Notifies that update package copy operation started.
+     *
+     * <p>This method is only called if update package file needs to be copied
+     * to data partition.</p>
+     */
+    void updatePackageCopyStarted();
+
+    /**
+     * Notifies that update package copy operation finished.
+     *
+     * <p>This method is only called if update package file needs to be copied
+     * to data partition.</p>
+     */
+    void updatePackageCopyFinished();
+
+    /**
+     * Notifies that update package verification started.
+     *
+     * <p>This method is only called if update package verification was
+     * requested on the firmware update call.</p>
+     */
+    void verifyStarted();
+
+    /**
+     * Notifies about update package verification progress.
+     *
+     * <p>This method is only called if update package verification was
+     * requested on the firmware update call.</p>
+     *
+     * @param progress Verification progress percentage.
+     */
+    void verifyProgress(int progress);
+
+    /**
+     * Notifies that package verification finished.
+     *
+     * <p>This method is only called if update package verification was
+     * requested on the firmware update call.</p>
+     */
+    void verifyFinished();
+
+    /**
+     * Notifies that the update process started and device is about to reboot.
+     */
+    void updateStarted();
+
+    /**
+     * Notifies about firmware update error.
+     *
+     * @param error Firmware update error message.
+     */
+    void onError(String error);
+}
