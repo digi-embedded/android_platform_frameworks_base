@@ -1637,6 +1637,13 @@
         android:label="@string/permlab_can"
         android:description="@string/permdesc_can" />
 
+    <!-- Allows access to system PWM. -->
+    <permission android:name="com.digi.android.permission.PWM"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_pwm"
+        android:description="@string/permdesc_pwm" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

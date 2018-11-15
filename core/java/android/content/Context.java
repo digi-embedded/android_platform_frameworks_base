@@ -3377,6 +3377,17 @@ public abstract class Context {
     public static final String CAN_SERVICE = "can";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.pwm.PWMHandler} for controlling PWM.
+     *
+     * @see #getSystemService
+     * @see android.pwm.PWMHandler
+     *
+     * @hide
+     */
+    public static final String PWM_SERVICE = "pwm";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

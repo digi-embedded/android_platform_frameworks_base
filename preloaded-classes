@@ -2067,6 +2067,7 @@ android.provider.Settings$System$DiscreteValueValidator
 android.provider.Settings$System$InclusiveFloatRangeValidator
 android.provider.Settings$System$InclusiveIntegerRangeValidator
 android.provider.Settings$System$Validator
+android.pwm.PWMHandler
 android.renderscript.RenderScriptCacheDir
 android.security.keystore.AndroidKeyStoreBCWorkaroundProvider
 android.security.keystore.AndroidKeyStoreProvider

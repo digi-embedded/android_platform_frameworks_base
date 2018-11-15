@@ -125,6 +125,8 @@ import android.os.health.SystemHealthManager;
 import android.os.storage.StorageManager;
 import android.print.IPrintManager;
 import android.print.PrintManager;
+import android.pwm.PWMHandler;
+import android.pwm.IPWMManager;
 import android.service.oemlock.IOemLockService;
 import android.service.oemlock.OemLockManager;
 import android.service.persistentdata.IPersistentDataBlockService;
@@ -968,6 +970,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.CAN_SERVICE);
                 ICANManager service = ICANManager.Stub.asInterface(b);
                 return new CANHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.PWM_SERVICE, PWMHandler.class,
+                new CachedServiceFetcher<PWMHandler>() {
+            @Override
+            public PWMHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.PWM_SERVICE);
+                IPWMManager service = IPWMManager.Stub.asInterface(b);
+                return new PWMHandler(ctx.getOuterContext(), service);
             }
         });
     }

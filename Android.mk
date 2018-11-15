@@ -325,6 +325,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/print/IWriteResultCallback.aidl \
 	core/java/android/printservice/IPrintService.aidl \
 	core/java/android/printservice/IPrintServiceClient.aidl \
+	core/java/android/pwm/IPWMManager.aidl \
 	core/java/android/companion/ICompanionDeviceManager.aidl \
 	core/java/android/companion/ICompanionDeviceDiscoveryService.aidl \
 	core/java/android/companion/ICompanionDeviceDiscoveryServiceCallback.aidl \
