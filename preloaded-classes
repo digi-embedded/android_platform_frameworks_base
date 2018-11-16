@@ -2642,6 +2642,7 @@ android.view.inputmethod.InputMethodManager$FinishedInputEventCallback
 android.view.inputmethod.InputMethodManager$H
 android.view.textclassifier.TextClassificationManager
 android.view.textservice.TextServicesManager
+android.watchdog.WatchdogHandler
 android.webkit.WebViewFactory
 android.webkit.WebViewFactory$MissingWebViewPackageException
 android.widget.AbsListView

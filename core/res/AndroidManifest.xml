@@ -1644,6 +1644,13 @@
         android:label="@string/permlab_pwm"
         android:description="@string/permdesc_pwm" />
 
+    <!-- Allows access to system Watchdog. -->
+    <permission android:name="com.digi.android.permission.WATCHDOG"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_watchdog"
+        android:description="@string/permdesc_watchdog" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

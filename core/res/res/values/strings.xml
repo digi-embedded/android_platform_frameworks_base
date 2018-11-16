@@ -1537,6 +1537,11 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_pwm">Allows the app to access system PWM.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_watchdog">access system Watchdog</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_watchdog">Allows the app to access system Watchdog.</string>
+
     <!-- Policy administration -->
 
     <!-- Title of policy access to limiting the user's password choices -->

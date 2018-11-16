@@ -157,6 +157,8 @@ import android.view.autofill.IAutoFillManager;
 import android.view.inputmethod.InputMethodManager;
 import android.view.textclassifier.TextClassificationManager;
 import android.view.textservice.TextServicesManager;
+import android.watchdog.WatchdogHandler;
+import android.watchdog.IWatchdogManager;
 
 import com.android.internal.app.IAppOpsService;
 import com.android.internal.app.IBatteryStats;
@@ -980,6 +982,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.PWM_SERVICE);
                 IPWMManager service = IPWMManager.Stub.asInterface(b);
                 return new PWMHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.WATCHDOG_SERVICE, WatchdogHandler.class,
+                new CachedServiceFetcher<WatchdogHandler>() {
+            @Override
+            public WatchdogHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.WATCHDOG_SERVICE);
+                IWatchdogManager service = IWatchdogManager.Stub.asInterface(b);
+                return new WatchdogHandler(ctx.getOuterContext(), service);
             }
         });
     }

@@ -3388,6 +3388,17 @@ public abstract class Context {
     public static final String PWM_SERVICE = "pwm";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.watchdog.WatchdogHandler} for controlling Watchdog access.
+     *
+     * @see #getSystemService
+     * @see android.watchdog.WatchdogHandler
+     * 
+     * @hide
+     */
+    public static final String WATCHDOG_SERVICE = "watchdog";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

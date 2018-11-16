@@ -218,6 +218,8 @@ public final class SystemServer {
             "com.android.server.can.CANService";
     private static final String PWM_SERVICE_CLASS =
             "com.android.server.pwm.PWMService";
+    private static final String WATCHDOG_SERVICE_CLASS =
+            "com.android.server.watchdog.WatchdogService";
 
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
@@ -1247,6 +1249,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartPWM");
             mSystemServiceManager.startService(PWM_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartWatchdog");
+            mSystemServiceManager.startService(WATCHDOG_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {
