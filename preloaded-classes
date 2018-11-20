@@ -2096,6 +2096,8 @@ android.security.net.config.RootTrustManagerFactorySpi
 android.security.net.config.SystemCertificateSource
 android.security.net.config.TrustedCertificateStoreAdapter
 android.security.net.config.UserCertificateSource
+android.serial.SerialPortHandler
+android.serial.SerialPortListenerImpl
 android.service.notification.StatusBarNotification
 android.service.oemlock.OemLockManager
 android.service.persistentdata.IPersistentDataBlockService

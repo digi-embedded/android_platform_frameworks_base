@@ -1658,6 +1658,13 @@
         android:label="@string/permlab_watchdog"
         android:description="@string/permdesc_watchdog" />
 
+    <!-- Allows access to system serial ports. -->
+    <permission android:name="com.digi.android.permission.SERIAL"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_serial"
+        android:description="@string/permdesc_serial" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

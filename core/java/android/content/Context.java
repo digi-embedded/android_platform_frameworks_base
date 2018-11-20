@@ -3411,6 +3411,17 @@ public abstract class Context {
     public static final String WATCHDOG_SERVICE = "watchdog";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.serial.SerialPortHandler} for controlling serial ports.
+     *
+     * @see #getSystemService
+     * @see android.serial.SerialPortHandler
+     *
+     * @hide
+     */
+    public static final String SERIAL_PORT_SERVICE = "serial_port";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

@@ -185,6 +185,8 @@ LOCAL_SRC_FILES += \
 	core/java/android/spi/ISPIManager.aidl \
 	core/java/android/i2c/II2CManager.aidl \
 	core/java/android/watchdog/IWatchdogManager.aidl \
+	core/java/android/serial/ISerialPortListener.aidl \
+	core/java/android/serial/ISerialPortManager.aidl \
 	../av/camera/aidl/android/hardware/ICameraService.aidl \
 	../av/camera/aidl/android/hardware/ICameraServiceListener.aidl \
 	../av/camera/aidl/android/hardware/ICameraServiceProxy.aidl \

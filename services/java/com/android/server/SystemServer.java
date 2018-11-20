@@ -222,6 +222,8 @@ public final class SystemServer {
             "com.android.server.pwm.PWMService";
     private static final String WATCHDOG_SERVICE_CLASS =
             "com.android.server.watchdog.WatchdogService";
+    private static final String SERIAL_PORT_SERVICE_CLASS =
+            "com.android.server.serial.SerialPortService";
 
     private static final String PERSISTENT_DATA_BLOCK_PROP = "ro.frp.pst";
 
@@ -1259,6 +1261,10 @@ public final class SystemServer {
 
             traceBeginAndSlog("StartFirmwareUpdate");
             mSystemServiceManager.startService(FIRMWARE_UPDATE_SERVICE_CLASS);
+            traceEnd();
+
+            traceBeginAndSlog("StartSerialPort");
+            mSystemServiceManager.startService(SERIAL_PORT_SERVICE_CLASS);
             traceEnd();
 
             if (!disableNonCoreServices && !disableSearchManager) {

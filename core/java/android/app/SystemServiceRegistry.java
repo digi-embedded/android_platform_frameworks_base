@@ -129,6 +129,8 @@ import android.print.IPrintManager;
 import android.print.PrintManager;
 import android.pwm.PWMHandler;
 import android.pwm.IPWMManager;
+import android.serial.SerialPortHandler;
+import android.serial.ISerialPortManager;
 import android.service.oemlock.IOemLockService;
 import android.service.oemlock.OemLockManager;
 import android.service.persistentdata.IPersistentDataBlockService;
@@ -1004,6 +1006,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.FIRMWARE_UPDATE_SERVICE);
                 IFirmwareUpdateManager service = IFirmwareUpdateManager.Stub.asInterface(b);
                 return new FirmwareUpdateHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.SERIAL_PORT_SERVICE, SerialPortHandler.class,
+                new CachedServiceFetcher<SerialPortHandler>() {
+            @Override
+            public SerialPortHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.SERIAL_PORT_SERVICE);
+                ISerialPortManager service = ISerialPortManager.Stub.asInterface(b);
+                return new SerialPortHandler(ctx.getOuterContext(), service);
             }
         });
     }
