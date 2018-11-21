@@ -31,22 +31,6 @@ package android.firmwareupdate;
 public interface FirmwareUpdateListenerImpl {
 
     /**
-     * Notifies that update package copy operation started.
-     *
-     * <p>This method is only called if update package file needs to be copied
-     * to data partition.</p>
-     */
-    void updatePackageCopyStarted();
-
-    /**
-     * Notifies that update package copy operation finished.
-     *
-     * <p>This method is only called if update package file needs to be copied
-     * to data partition.</p>
-     */
-    void updatePackageCopyFinished();
-
-    /**
      * Notifies that update package verification started.
      *
      * <p>This method is only called if update package verification was

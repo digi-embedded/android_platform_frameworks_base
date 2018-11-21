@@ -26,16 +26,6 @@ package android.firmwareupdate;
 oneway interface IFirmwareUpdateListener
 {
     /**
-     * Notifies that update package copy operation started.
-     */
-    void updatePackageCopyStarted();
-
-    /**
-     * Notifies that update package copy operation finished.
-     */
-    void updatePackageCopyFinished();
-
-    /**
      * Notifies that package verification started.
      */
     void verifyStarted();

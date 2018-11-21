@@ -47,6 +47,10 @@ public class FirmwareUpdateHandler {
 
     // Constants.
     /** @hide */
+    public static final String CACHE_PREFIX = "/cache/";
+    /** @hide */
+    public static final String UPDATE_FILE = "/cache/fw_update/update.zip";
+    /** @hide */
     public static final String ID_EXCEPTION = "exception";
     /** @hide */
     public static final String TAG = "FirmwareUpdateHandler";

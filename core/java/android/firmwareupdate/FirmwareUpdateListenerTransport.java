@@ -40,13 +40,11 @@ import android.util.Log;
 public class FirmwareUpdateListenerTransport extends IFirmwareUpdateListener.Stub {
 
     // Constants.
-    private static final int TYPE_COPY_STARTED = 0;
-    private static final int TYPE_COPY_FINISHED = 1;
-    private static final int TYPE_VERIFY_STARTED = 2;
-    private static final int TYPE_VERIFY_PROGRESS = 3;
-    private static final int TYPE_VERIFY_FINISHED = 4;
-    private static final int TYPE_UPDATE_STARTED = 5;
-    private static final int TYPE_ERROR = 6;
+    private static final int TYPE_VERIFY_STARTED = 0;
+    private static final int TYPE_VERIFY_PROGRESS = 1;
+    private static final int TYPE_VERIFY_FINISHED = 2;
+    private static final int TYPE_UPDATE_STARTED = 3;
+    private static final int TYPE_ERROR = 4;
 
     // Variables.
     private FirmwareUpdateListenerImpl mListener;
@@ -80,16 +78,6 @@ public class FirmwareUpdateListenerTransport extends IFirmwareUpdateListener.Stu
             };
         };
         workerThread.start();
-    }
-
-    @Override
-    public void updatePackageCopyStarted() {
-        mListenerHandler.sendEmptyMessage(TYPE_COPY_STARTED);
-    }
-
-    @Override
-    public void updatePackageCopyFinished() {
-        mListenerHandler.sendEmptyMessage(TYPE_COPY_FINISHED);
     }
 
     @Override
@@ -130,12 +118,6 @@ public class FirmwareUpdateListenerTransport extends IFirmwareUpdateListener.Stu
      */
     private void _handleMessage(Message msg) {
         switch (msg.what) {
-        case TYPE_COPY_STARTED:
-            mListener.updatePackageCopyStarted();
-            break;
-        case TYPE_COPY_FINISHED:
-            mListener.updatePackageCopyFinished();
-            break;
         case TYPE_VERIFY_STARTED:
             mListener.verifyStarted();
             break;
