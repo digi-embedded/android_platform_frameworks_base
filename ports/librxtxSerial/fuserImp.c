@@ -135,7 +135,7 @@ static void check_dir(const char *rel,pid_t pid,int type)
     if (!(dir = opendir(rel))) return;
     while ( (de = readdir(dir) ) )
 	if (strcmp(de->d_name,".") && strcmp(de->d_name,"..")) {
-	    snprintf(path,"%s/%s",rel,de->d_name);
+	    snprintf(path,PATH_MAX,"%s/%s",rel,de->d_name);
             if (stat(path,&st) >= 0)
                add_file(path,st.st_dev,st.st_ino,pid,type);
 	}

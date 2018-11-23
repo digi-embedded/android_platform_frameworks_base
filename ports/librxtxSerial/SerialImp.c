@@ -76,6 +76,7 @@
 #ifndef WIN32
 #include <unistd.h>
 #include <sys/ioctl.h>
+#include <sys/sysmacros.h>
 #include <sys/param.h>
 #include <sys/utsname.h>
 #include <pthread.h>
