@@ -110,7 +110,7 @@
 // #undef TIOCGSERIAL
 // #undef TIOCSSERIAL
 #define DEVICEDIR "/dev/"
-#define USER_LOCK_DIRECTORY "/data/local/tmp"
+#define USER_LOCK_DIRECTORY "/dev/lock"
 #define LOCKFILEPREFIX "LCK.."
 #define FHS
 
