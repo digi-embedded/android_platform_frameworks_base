@@ -187,6 +187,10 @@ LOCAL_SRC_FILES += \
 	core/java/android/watchdog/IWatchdogManager.aidl \
 	core/java/android/serial/ISerialPortListener.aidl \
 	core/java/android/serial/ISerialPortManager.aidl \
+	core/java/android/cloudconnector/ICloudConnectorEventListener.aidl \
+	core/java/android/cloudconnector/ICloudConnectorManager.aidl \
+	core/java/android/cloudconnector/IDeviceRequestListener.aidl \
+	core/java/android/cloudconnector/IFileSystemManager.aidl \
 	../av/camera/aidl/android/hardware/ICameraService.aidl \
 	../av/camera/aidl/android/hardware/ICameraServiceListener.aidl \
 	../av/camera/aidl/android/hardware/ICameraServiceProxy.aidl \

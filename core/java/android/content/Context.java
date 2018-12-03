@@ -3422,6 +3422,18 @@ public abstract class Context {
     public static final String SERIAL_PORT_SERVICE = "serial_port";
 
     /**
+     * Use with {@link #getSystemService} to retrieve a {@link
+     * android.cloudconnector.CloudConnectorHandler} for controlling system
+     * Cloud Connector access.
+     *
+     * @see #getSystemService
+     * @see android.cloudconnector.CloudConnectorHandler
+     *
+     * @hide
+     */
+    public static final String CLOUD_CONNECTOR_SERVICE = "cloud_connector";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.location.CountryDetector} for detecting the country that
      * the user is in.

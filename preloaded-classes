@@ -713,6 +713,11 @@ android.bluetooth.IBluetoothProfileServiceConnection$Stub
 android.bluetooth.IBluetoothStateChangeCallback
 android.bluetooth.IBluetoothStateChangeCallback$Stub
 android.can.CANHandler
+android.cloudconnector.CloudConnectorEventListenerImpl
+android.cloudconnector.CloudConnectorHandler
+android.cloudconnector.DeviceRequestListenerImpl
+android.cloudconnector.DeviceRequestListenerTransport
+android.cloudconnector.EventListenerTransport
 android.companion.CompanionDeviceManager
 android.content.AbstractThreadedSyncAdapter
 android.content.AbstractThreadedSyncAdapter$ISyncAdapterImpl

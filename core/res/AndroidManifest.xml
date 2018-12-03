@@ -1665,6 +1665,13 @@
         android:label="@string/permlab_serial"
         android:description="@string/permdesc_serial" />
 
+    <!-- Allows access to system Cloud Connector. -->
+    <permission android:name="com.digi.android.permission.CLOUD_CONNECTOR"
+        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:protectionLevel="normal"
+        android:label="@string/permlab_cloud_connector"
+        android:description="@string/permdesc_cloud_connector" />
+
     <!-- =========================================== -->
     <!-- Permissions associated with camera and image capture -->
     <!-- =========================================== -->

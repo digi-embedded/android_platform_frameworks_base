@@ -1,0 +1,52 @@
+<!-- Copyright 2018, Digi International Inc.
+
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, you can obtain one at http://mozilla.org/MPL/2.0/.
+
+     THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+     WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+     MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+     ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+     WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+     ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+     OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+-->
+<!--
+List of targets for the Firmware Update.
+-->
+<targets>
+	<firmware_target id="0" name="Android System">
+		<!-- Maximum allowed size of the firmware image -->
+		<size>536870912</size>
+		<!-- Regular expression for the firmware image name -->
+		<regex>update\.zip</regex>
+		<!-- Determines if the firmware can be updated or not -->
+		<can_update>true</can_update>
+		<!-- Path to save the firmware image if the 'firmware_file_notify' 
+		property of the connector_config.txt is 'file_completed' -->
+		<path>/cache/fw_update/</path>
+	</firmware_target>
+	<firmware_target id="1" name="Update manifest">
+		<!-- Maximum allowed size of the firmware image -->
+		<size>2048</size>
+		<!-- Regular expression for the firmware image name -->
+		<regex>manifest\.txt</regex>
+		<!-- Determines if the firmware can be updated or not -->
+		<can_update>true</can_update>
+		<!-- Path to save the firmware image if the 'firmware_file_notify' 
+		property of the connector_config.txt is 'file_completed' -->
+		<path>/cache/fw_update/</path>
+	</firmware_target>
+	<firmware_target id="2" name="Application package">
+		<!-- Maximum allowed size of the firmware image -->
+		<size>104857600</size>
+		<!-- Regular expression for the firmware image name -->
+		<regex>.+\.apk</regex>
+		<!-- Determines if the firmware can be updated or not -->
+		<can_update>true</can_update>
+		<!-- Path to save the firmware image if the 'firmware_file_notify' 
+		property of the connector_config.txt is 'file_completed' -->
+		<path>/cache/fw_update/</path>
+	</firmware_target>
+</targets>

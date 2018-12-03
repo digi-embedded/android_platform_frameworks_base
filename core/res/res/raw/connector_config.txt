@@ -1,0 +1,317 @@
+# Copyright 2018, Digi International Inc.
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, you can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+#=====================================================================================
+# Cloud Connector General Settings
+#=====================================================================================
+
+# Device ID type: Determines the way a Device ID will be generated.
+# Possible values are:
+#   - static        Device ID will be manually specified in the 'device_id' setting.
+#   - network       Device ID will be auto-generated and saved using active interface.
+#   - provisioning  Device ID will be provisioned from Device Cloud using the Vendor ID
+#                   number set in the 'vendor_id' setting. 
+device_id_type=network
+
+# Device ID: 16-octet number for uniquely identifying devices in Device Cloud. This 
+# setting should be left blank if 'device_type' is set to 'provisioning' or 'network'.
+If 'device_type' is set to 'static' then this setting must be filled.
+device_id=
+
+# Vendor ID: Identifier of the Device Cloud user account. This value will be used to
+# determine the account to which a device belongs to. If 'device_id_type' setting is set
+# to 'provisioning', this value determines the account that offers Device ID 
+# provisioning. It can be obtained under 'Admin > Account Settings > My Account > 
+# Vendor Information' within your Device Cloud account. If this setting is not properly
+# configured or is left empty, an error will be thrown while connecting. The format of this
+# setting is: '0xXXXXXXXX'.
+vendor_id=
+
+# Firmware Version: Determines the version of the application running Cloud 
+# Connector. This version number is formed by 4 numeric values separated with a dot.
+# This version is used just in case target 0x00 is not defined by the user (or it is 
+# invalid) in the 'firmware_targets.xml' file.
+# The target 0x00 version among 'device_type' and 'vendor_id' is used by Device Cloud
+# to cache RCI device descriptor. Changing any of these values will cause Device Cloud 
+# to ask the device for a new RCI device descriptor. 
+firmware_version=0.0.0.1
+
+# Device Type: Name of the device running Cloud Connector.
+device_type=ConnectCore 6
+
+# Description: Description of the device running Cloud Connector.
+description=
+
+# Contact: Contact information of the maintainer of the device.
+contact=
+
+# Location: Location of the device. This does not imply GPS coordinates, just a readable
+# location.
+location=
+
+
+#=====================================================================================
+# Cloud Connector Connection Settings
+#=====================================================================================
+
+# URL: Device Cloud URL to which Cloud Connector will connect to.
+url=remotemanager.digi.com
+
+# Enable Secure Connection: Set to 'True' to connect to Device Cloud using the secure 
+# protocol (SSL), set it to 'False' to establish a standard TCP connection.
+enable_secure_connection=True
+
+# Enable Compression: Set to 'True' to enable ZLib compression while sending/receiving
+# data from Device Cloud, set it to 'False' to disable data compression.
+enable_compression=True
+
+# Enable Auto-connect: If set to 'True', Cloud Connector will attempt to connect to
+# Device Cloud just after boot or every time internet connectovity is available.
+enable_auto_connect=False
+
+# Enable Reconnect: If set to 'True', Cloud Connector will attempt to reconnect to
+# Device Cloud after a connection is lost or there is a connection error.
+enable_reconnect=True
+
+# Reconnect Time: Determines the time in seconds to wait after the connection is lost 
+# or there is a connection error before attempting to reconnect. This setting has effect
+# only if 'enable_reconnect' setting is set to 'True'.
+reconnect_time=10
+
+# Keep Alive Time: Determines the time frequency in seconds in which Cloud Connector
+# will send 'Keep Alive' messages to Device Cloud to maintain an open connection.
+keep_alive_time=30
+
+# Server Keep Alive Time: Determines the time frequency in seconds in which Cloud
+# Connector expects to receive 'Keep Alive' messages from Device Cloud to maintain 
+# an open connection.
+server_keep_alive_time=30
+
+# Wait Times: Determines the number of lost 'Keep Alive' messages (sent or received) 
+# before considering the connection between Cloud Connector and Device Cloud lost.
+wait_times=5
+
+# Authorization type: Determines the type of authorization to use to connect to Device
+# Cloud using the configured Device ID. This feature only works if the Device ID is 
+# configured to require any of the authorization mechanisms set via the '/ws/DeviceCore' 
+# provisioning service.
+# Possible values are:
+#   - none        No authorization mechanism enabled for this Device ID.
+#   - basic       Basic password authorization is required for this Device ID.
+authorization_type=none
+
+# Password: Connection authorization password. This setting has effect only if 
+# the 'authorization_type' setting is set to 'basic'.
+password=password
+
+
+#=====================================================================================
+# Cloud Connector Services Settings
+#=====================================================================================
+
+# EnableRCI: Set it to 'True' to enable the RCI facility in Cloud Connector. RCI allows
+# Device Cloud to offer a configuration layer from Device Management to access several
+# device settings and stats described in a descriptor file.
+enable_rci=True
+
+# Extend RCI: Set it to 'True' if you want to extend the default RCI device descriptor
+# to add custom device settings and stats to be configured and viewed from Device
+# Manager. A custom RCI Hook must be passed to the CloudConnector constructor for this RCI
+# extend feature.
+extend_rci=True
+
+# Descriptor Type: Determines where the descriptor file is stored: 'resource', Cloud
+# Connector will look for the descriptor file (defined in 'descriptor_loc') inside the raw
+# resources folder; 'external', Cloud Connector will look for the file in the file system
+# of the device; 'stream', Cloud Connector will retrieve the descriptor contents as an 
+# input stream provided by the hook class implementation.
+descriptor_type=stream
+
+# Descriptor Location: Determines the location of the custom RCI descriptor that will
+# extend the default device RCI descriptor. This setting has effect only if the
+# 'extend_rci' setting is set to 'True'.
+descriptor_loc=rci_descriptor
+
+# Enable Data Service: Set it to 'True' to enable the Data Push and Device Request 
+# features. This will allow the device to upload Data Points and files to Device Cloud
+# and receive device requests.
+enable_data_service=True
+
+# Enable File System: Set it to 'True' to enable access to the file system from Device 
+# Cloud. This feature allows you to list, download, upload, and remove of files remotely.
+enable_file_system=True
+
+# Storage Directory: Determines the file system sandbox root directory to use for the
+# file system service. This setting has effect only if the 'enable_file_system' setting
+# is set to 'True'.
+storage_dir=/cache
+
+# Firmware File Notify: Establishes the notification method in the firmware update
+# process.
+# Possible values are:
+#   - chunk_received    Notifies when a new data chunk is received during a
+#                       firmware update.
+#   - file_completed    Notifies when a full firmware file is downloaded and stored 
+#                       in the path of the target.
+#
+# Firmware update targets must be specified in a 'firmware_targets.xml' file 
+# describing the number of available targets with their names, paths, sizes, and 
+# file patterns. A custom Firmware implementation must be passed to the 
+# CloudConnector constructor for this feature.
+firmware_file_notify=file_completed
+
+# Default path where the applications or packages to be installed/updated are located 
+app_update_directory=/mnt/sdcard
+
+#=====================================================================================
+# Cloud Connector Logging Settings
+#=====================================================================================
+
+# Log Information Messages: Set it to 'True' to log information level messages. 
+log_information=True
+
+# Log Error Messages: Set it to 'True' to log error level messages.
+log_errors=True
+
+# Log Debug Messages: Set it to 'True' to log debug level messages.
+log_debug=False
+
+# Log Raw Packets: Set it to 'True' to log raw EDP protocol messages. This setting will
+# take effect only if the 'log_debug' setting is set to 'True'.
+log_packets=False
+
+# Log Exceptions: Set it to 'True' to log exceptions.
+log_exceptions=True
+
+# Log System Events: Set it to 'True' to log system events.
+log_system_events=True
+
+# Log Connection Events: Set it to 'True' to log connection events.
+log_connection_events=True
+
+# Log RCI Events: Set it to 'True' to log RCI feature events.
+log_rci_events=True
+
+# Log Device Request Events: Set it to 'True' to log Device Request feature events.
+log_device_request_events=True
+
+# Log Data Push Events: Set it to 'True' to log Data Push feature events.
+log_data_push_events=True
+
+# Log Data Points Events: Set it to 'True' to log Data Points feature events.
+log_data_point_events=True
+
+# Log File System Events: Set it to 'True' to log File System feature events.
+log_file_system_events=True
+
+# Log Firmware Events: Set it to 'True' to log Firmware feature events.
+log_firmware_events=True
+
+# Log Tag: Identifies the instance of the Cloud Connector in the log messages. 
+# This setting is useful if the application is going to run multiple instances 
+# of the Cloud Connector concurrently.
+log_tag=
+
+# Log Output: Establishes the enabled log messages output.
+# Possible values are:
+#   - console Log messages will be sent to the standard output.
+#   - file    Log messages will be sent to a file located inside the directory 
+#             configured in the 'storage_dir' property. Its name will follow the 
+#             format 'connector_log_yyyyMMdd_HHmmss.txt', where:
+#                yyyy:   current year
+#                MM:     current month
+#                dd:     current day of month
+#                HH:     current hour
+#                mm:     current minutes
+#                ss:     current seconds
+#
+#             By default, the complete path of the log file is 
+#    
+#                'file://C:/connector_log_yyyyMMdd_HHmmss.txt'
+#
+#  - both     Log messages will be sent to the standard output and to a log file
+#             as it is described above.
+log_output=console
+
+
+#=====================================================================================
+# Cloud Connector System Settings
+#=====================================================================================
+
+# Use Static Location: Set it to 'True' to specify a static GPS location for the
+# device. If set to 'False', GPS location of the device will be 'unknown'.
+use_static_location=False
+
+# Static Location Latitude: Determines the latitude of the GPS static location. This
+# setting only has effect if the 'use_static_location' setting is set to 'True'.
+static_location_latitude=42.46288
+
+# Static Location Longitude: Determines the longitude of the GPS static location. This
+# setting only has effect if the 'use_static_location' setting is set to 'True'.
+static_location_longitude=-2.43798
+
+# Static Location Elevation: Determines the elevation of the GPS static location. This
+# setting only has effect if the 'use_static_location' setting is set to 'True'.
+static_location_elevation=35
+
+#=====================================================================================
+# Cloud Connector System Monitor Settings
+#=====================================================================================
+
+# Enable System Monitor: Set it to 'True' to let Cloud Connector to gather system
+# information periodically and send it to Device Cloud via Data Points. Enable Data 
+# Service option must be set to 'True'
+enable_system_monitor=False
+
+# System monitor sample rate: Determines the frequency at which the service will gather
+# system information to store it in the samples buffer (in seconds).
+system_monitor_sample_rate=10
+
+# System monitor samples buffer size: Determines the size of the buffer used to store 
+# system information samples.
+system_monitor_samples_buffer_size=5000
+
+# System monitor upload samples size: Determines the number of samples of each channel
+# that must be stored in the buffer before performing an upload operation.
+system_monitor_upload_samples_size=6
+
+# System monitor enable memory sampling: Set it to 'true' to enable the sampling of
+# system memory information.
+system_monitor_enable_memory_sampling=True
+
+# System monitor enable CPU load sampling: Set it to 'true' to enable the sampling of
+# CPU load information.
+system_monitor_enable_cpu_load_sampling=True
+
+# System monitor enable CPU temperature sampling: Set it to 'true' to enable the sampling
+# of CPU temperature information.
+system_monitor_enable_cpu_temperature_sampling=True
+
+#=====================================================================================
+# Cloud Connector RCI Descriptors Settings
+#=====================================================================================
+
+# RCI descriptor is split in different sections that can be enabled or disabled. 
+# Set a specific section to 'True' to enable it or to 'False' to disable it.
+#ethernet_descriptor=True
+ethernet_descriptor=False
+#wifi_descriptor=True
+wifi_descriptor=False
+#bluetooth_descriptor=True
+bluetooth_descriptor=False
+app_update_descriptor=False
+#list_apps_descriptor=True
+list_apps_descriptor=False
+
+# Add here the settings to enable or disable custom RCI descriptor sections.

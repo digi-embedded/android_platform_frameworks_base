@@ -34,6 +34,8 @@ import android.appwidget.AppWidgetManager;
 import android.bluetooth.BluetoothManager;
 import android.can.CANHandler;
 import android.can.ICANManager;
+import android.cloudconnector.CloudConnectorHandler;
+import android.cloudconnector.ICloudConnectorManager;
 import android.companion.CompanionDeviceManager;
 import android.companion.ICompanionDeviceManager;
 import android.content.ClipboardManager;
@@ -1016,6 +1018,16 @@ final class SystemServiceRegistry {
                 IBinder b = ServiceManager.getServiceOrThrow(Context.SERIAL_PORT_SERVICE);
                 ISerialPortManager service = ISerialPortManager.Stub.asInterface(b);
                 return new SerialPortHandler(ctx.getOuterContext(), service);
+            }
+        });
+
+        registerService(Context.CLOUD_CONNECTOR_SERVICE, CloudConnectorHandler.class,
+            new CachedServiceFetcher<CloudConnectorHandler>() {
+            @Override
+            public CloudConnectorHandler createService(ContextImpl ctx) throws ServiceNotFoundException {
+                IBinder b = ServiceManager.getServiceOrThrow(Context.CLOUD_CONNECTOR_SERVICE);
+                ICloudConnectorManager service = ICloudConnectorManager.Stub.asInterface(b);
+                return new CloudConnectorHandler(ctx.getOuterContext(), service);
             }
         });
     }
