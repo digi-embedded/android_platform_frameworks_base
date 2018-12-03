@@ -378,7 +378,7 @@ public class CloudConnectorHandler {
      *
      * @throws NullPointerException if {@code datapoints == null}
      */
-    public void sendDataPoints(List<DataPointImpl> dataPoints) {
+    public void sendDataPoints(List<String> dataPoints) {
         // Sanity checks.
         if (dataPoints == null)
             throw new NullPointerException(ERROR_DATAPOINTS_NULL);
@@ -394,17 +394,20 @@ public class CloudConnectorHandler {
     /**
      * Sends the given list of data points to Device Cloud.
      *
-     * @param datapoints The data points list to send.
+     * @param data The data points list to send.
+     * @param streamName Data stream name.
+     * @param streamUnits Data stream units.
+     * @param streamForwardTo List of data streams names to replicate data points to.
      *
      * @throws NullPointerException if {@code datapoints == null}
      */
-    public void sendBinaryDataPoint(BinaryDataPointImpl dataPoint) {
+    public void sendBinaryDataPoint(byte[] data, String streamName, String streamUnits, String[] streamForwardTo) {
         // Sanity checks.
-        if (dataPoint == null)
+        if (data == null || streamName == null)
             throw new NullPointerException(ERROR_DATAPOINTS_NULL);
 
         try {
-            service.sendBinaryDataPoint(dataPoint);
+            service.sendBinaryDataPoint(data, streamName, streamUnits, streamForwardTo);
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException in sendBinaryDataPoint", e);
             throw new RuntimeException(e);

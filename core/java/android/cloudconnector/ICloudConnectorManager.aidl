@@ -18,8 +18,6 @@ package android.cloudconnector;
 
 import java.util.List;
 
-import android.cloudconnector.BinaryDataPointImpl;
-import android.cloudconnector.DataPointImpl;
 import android.cloudconnector.ICloudConnectorEventListener;
 import android.cloudconnector.IDeviceRequestListener;
 
@@ -65,10 +63,10 @@ interface ICloudConnectorManager
     void writePreference(in String preference, in String value);
 
     /* Sends the given list of data points */
-    void sendDataPoints(in List<DataPointImpl> dataPoints);
+    void sendDataPoints(in List<String> dataPoints);
 
     /* Sends the given binary data point */
-    void sendBinaryDataPoint(in BinaryDataPointImpl dataPoint);
+    void sendBinaryDataPoint(in byte[] data, in String streamName, in String streamUnits, in String[] streamForwardTo);
 
     /* Enables/disables the system monitor */
     void enableSystemMonitor(in boolean enable);
