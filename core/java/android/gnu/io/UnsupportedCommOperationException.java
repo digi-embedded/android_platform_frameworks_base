@@ -85,4 +85,13 @@ public class UnsupportedCommOperationException extends Exception
 	{
 		super( str );
 	}
+/**
+* create an instance with a message about why the Exception was thrown and the cause.
+* @param str	A detailed message explaining the reason for the Exception.
+* @param cause	The throwable that caused the Exception.
+*/
+	public UnsupportedCommOperationException( String str, Throwable cause )
+	{
+		super( str, cause );
+	}
 }

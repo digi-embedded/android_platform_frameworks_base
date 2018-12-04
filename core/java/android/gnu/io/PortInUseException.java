@@ -87,5 +87,14 @@ the owner of the port requested.
 	{
 		super();
 	}
+/**
+* create an instance with a message about why the Exception was thrown and the cause.
+* @param str	A detailed message explaining the reason for the Exception.
+* @param cause	The throwable that caused the Exception.
+*/
+	public PortInUseException( String str, Throwable cause )
+	{
+		super( str, cause );
+	}
 }
 
