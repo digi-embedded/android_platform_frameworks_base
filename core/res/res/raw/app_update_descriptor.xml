@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<query_descriptor>
+	<!--Descriptor for <query_setting /> -->
+	<descriptor element="query_setting" desc="Retrieve device configuration">
+		<descriptor element="app_update" desc="Application Update" format="app_update_format"/>
+		<format_define name="app_update_format">
+			<element name="app_update_directory" desc="Applications location directory" type="string" default="/mnt/sdcard" access="read_write"/>
+			<element name="available_packages" desc="Available applications" type="multiline_string" default="" access="read_only"/>
+			<element name="package_to_update" desc="Application to install" type="string" default="" access="write_only"/>
+		</format_define>
+	</descriptor>
+
+	<!-- Descriptor for <set_setting /> -->
+	<descriptor element="set_setting" desc="Set device configuration">
+		<descriptor element="app_update" desc="App update" format="app_update_format"/>
+	</descriptor>
+
+	<!-- Descriptor for <query_state /> -->
+	<descriptor element="query_state" desc="Request device current state">
+	</descriptor>
+</query_descriptor>

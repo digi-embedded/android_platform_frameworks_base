@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<query_descriptor>
+	<!--Descriptor for <query_setting /> -->
+	<descriptor element="query_setting" desc="Retrieve device configuration">
+	</descriptor>
+
+	<!-- Descriptor for <set_setting /> -->
+	<descriptor element="set_setting" desc="Set device configuration">
+	</descriptor>
+
+	<!-- Descriptor for <query_state /> -->
+	<descriptor element="query_state" desc="Request device current state">
+		<descriptor element="list_apps" desc="Installed applications" access="read_only">
+			<element name="installed_apps" desc="Installed applications" type="multiline_string" default="" access="read_only"/>
+		</descriptor>
+	</descriptor>
+</query_descriptor>

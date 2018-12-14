@@ -304,14 +304,10 @@ system_monitor_enable_cpu_temperature_sampling=True
 
 # RCI descriptor is split in different sections that can be enabled or disabled. 
 # Set a specific section to 'True' to enable it or to 'False' to disable it.
-#ethernet_descriptor=True
-ethernet_descriptor=False
-#wifi_descriptor=True
-wifi_descriptor=False
-#bluetooth_descriptor=True
-bluetooth_descriptor=False
+ethernet_descriptor=True
+wifi_descriptor=True
+bluetooth_descriptor=True
 app_update_descriptor=False
-#list_apps_descriptor=True
-list_apps_descriptor=False
+list_apps_descriptor=True
 
 # Add here the settings to enable or disable custom RCI descriptor sections.

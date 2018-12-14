@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<query_descriptor>
+	<!--Descriptor for <query_setting /> -->
+	<descriptor element="query_setting" desc="Retrieve device configuration">
+		<descriptor element="bluetooth" desc="Bluetooth" format="bluetooth_format"/>
+		<format_define name="bluetooth_format">
+			<element name="enable_bluetooth" desc="Enable Bluetooth" type="on_off" default="on"/>
+			<element name="address" desc="Bluetooth address" type="mac_addr" default="00:00:00:00:00:00" access="read_only"/>
+			<element name="name" desc="Device name : Bluetooth needs to be enabled to write" type="string" min="1" max="248" default="CCIMX6SBC"/>
+			<element name="scan_mode" desc="Scan mode : Bluetooth needs to be enabled to read/write" type="enum" default="connectable">
+				<value value="unknown" desc="Unknown"/>
+				<value value="none" desc="None"/>
+				<value value="connectable" desc="Only connectable"/>
+				<value value="discoverable" desc="Connectable and discoverable"/>
+			</element>
+			<element name="bonded_devices" desc="Paired devices : Bluetooth needs to be enabled to read" type="multiline_string" default="Unknown" access="read_only"/>
+		</format_define>
+	</descriptor>
+
+	<!-- Descriptor for <set_setting /> -->
+	<descriptor element="set_setting" desc="Set device configuration">
+		<descriptor element="bluetooth" desc="Bluetooth" format="bluetooth_format"/>
+	</descriptor>
+
+	<!-- Descriptor for <query_state /> -->
+	<descriptor element="query_state" desc="Request device current state">
+	</descriptor>
+</query_descriptor>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<query_descriptor>
+	<!--Descriptor for <query_setting /> -->
+	<descriptor element="query_setting" desc="Retrieve device configuration">
+		<descriptor element="system_monitor" desc="System Monitor" format="system_monitor_format"/>
+		<format_define name="system_monitor_format">
+			<element name="enabled" desc="Enable system monitor" type="on_off" default="on"/>
+			<element name="sample_rate" desc="System monitor sample rate (seconds)" type="int32" min="5" max="60" default="10" access="read_write"/>
+			<element name="upload_samples_size" desc="Samples to store for each stream before uploading" type="int32" min="1" max="250" default="5" access="read_write"/>
+			<element name="enable_memory" desc="Enable memory monitoring" type="on_off" default="on"/>
+			<element name="enable_cpu_load" desc="Enable CPU load monitoring" type="on_off" default="on"/>
+			<element name="enable_cpu_temperature" desc="Enable CPU temperature monitoring" type="on_off" default="on"/>
+		</format_define>
+	</descriptor>
+
+	<!-- Descriptor for <set_setting /> -->
+	<descriptor element="set_setting" desc="Set device configuration">
+		<descriptor element="system_monitor" desc="System Monitor" format="system_monitor_format"/>
+	</descriptor>
+
+	<!-- Descriptor for <query_state /> -->
+	<descriptor element="query_state" desc="Request device current state">
+	</descriptor>
+</query_descriptor>
