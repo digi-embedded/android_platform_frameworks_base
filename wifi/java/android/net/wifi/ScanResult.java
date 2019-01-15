@@ -448,7 +448,7 @@ public class ScanResult implements Parcelable {
         this.capabilities = caps;
         this.level = level;
         this.frequency = frequency;
-        this.timestamp = tsf;
+        this.timestamp = tsf * 1000;
         this.distanceCm = UNSPECIFIED;
         this.distanceSdCm = UNSPECIFIED;
         this.channelWidth = UNSPECIFIED;
