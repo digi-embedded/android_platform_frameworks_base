@@ -28,7 +28,12 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.INetworkManagementService;
 import android.os.Looper;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
@@ -217,6 +222,37 @@ public class NetworkControllerImpl extends BroadcastReceiver
                         deviceProvisionedController.getCurrentUser()));
             }
         });
+
+        checkEthernetInterfaces();
+    }
+
+    /**
+     * Checks the value of the Ethernet enabled property for each interface
+     * to update its status.
+     */
+    private void checkEthernetInterfaces() {
+        IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        INetworkManagementService nmService = INetworkManagementService.Stub.asInterface(b);
+
+        String sIfaceMatch = mContext.getResources().getString(
+                com.android.internal.R.string.config_ethernet_iface_regex);
+
+        try {
+            // Get the Ethernet interfaces.
+            for (String iface : nmService.listInterfaces()) {
+                if (iface.matches(sIfaceMatch)) {
+                    // Search the Ethernet enabled property in the system properties.
+                    String prop = SystemProperties.get(String.format("persist.%s.enabled", iface));
+                    // If it exists and its value is 0, turn off the Ethernet interface.
+                    if (prop != null && prop.equals("0")) {
+                        nmService.setInterfaceDown(iface);
+                        Log.d(TAG, "Ethernet interface " + iface + " turned off");
+                    }
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public DataSaverController getDataSaverController() {
