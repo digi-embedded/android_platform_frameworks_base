@@ -77,12 +77,12 @@ enable_secure_connection=True
 enable_compression=True
 
 # Enable Auto-connect: If set to 'True', Cloud Connector will attempt to connect to
-# Device Cloud just after boot or every time internet connectovity is available.
+# Device Cloud just after boot or every time internet connectivity is available.
 enable_auto_connect=False
 
 # Enable Reconnect: If set to 'True', Cloud Connector will attempt to reconnect to
 # Device Cloud after a connection is lost or there is a connection error.
-enable_reconnect=True
+enable_reconnect=False
 
 # Reconnect Time: Determines the time in seconds to wait after the connection is lost 
 # or there is a connection error before attempting to reconnect. This setting has effect
