@@ -37,17 +37,7 @@ public class EthernetManager {
 
     private final Context mContext;
     private final IEthernetManager mService;
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == MSG_AVAILABILITY_CHANGED) {
-                boolean isAvailable = (msg.arg1 == 1);
-                for (Listener listener : mListeners) {
-                    listener.onAvailabilityChanged((String) msg.obj, isAvailable);
-                }
-            }
-        }
-    };
+    private Handler mHandler;
     private final ArrayList<Listener> mListeners = new ArrayList<>();
     private final IEthernetServiceListener.Stub mServiceListener =
             new IEthernetServiceListener.Stub() {
@@ -135,6 +125,19 @@ public class EthernetManager {
         }
         mListeners.add(listener);
         if (mListeners.size() == 1) {
+            if (mHandler == null) {
+                mHandler = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        if (msg.what == MSG_AVAILABILITY_CHANGED) {
+                            boolean isAvailable = (msg.arg1 == 1);
+                            for (Listener listener : mListeners) {
+                                listener.onAvailabilityChanged((String) msg.obj, isAvailable);
+                            }
+                        }
+                    }
+                };
+            }
             try {
                 mService.addListener(mServiceListener);
             } catch (RemoteException e) {
