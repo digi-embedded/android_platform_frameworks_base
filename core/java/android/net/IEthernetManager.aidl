@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2018-2021 Digi International Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,4 +37,9 @@ interface IEthernetManager
     void setIncludeTestInterfaces(boolean include);
     void requestTetheredInterface(in ITetheredInterfaceCallback callback);
     void releaseTetheredInterface(in ITetheredInterfaceCallback callback);
+    void setEnabled(String iface, boolean enable);
+    boolean isEnabled(String iface);
+    boolean isConnected(String iface);
+    void resetInterface(String iface);
+    String getMacAddress(String iface);
 }

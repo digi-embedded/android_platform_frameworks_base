@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 The Android Open Source Project
+ * Copyright (C) 2018-2021 Digi International Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
 package android.net;
 
 import android.annotation.NonNull;
+import android.annotation.Nullable;
 import android.annotation.RequiresPermission;
 import android.annotation.SystemApi;
 import android.annotation.SystemService;
@@ -291,5 +293,79 @@ public class EthernetManager {
             throw e.rethrowFromSystemServer();
         }
         return new TetheredInterfaceRequest(mService, cbInternal);
+    }
+
+    /**
+     * Returns whether the given Ethernet interface is connected or not.
+     *
+     * @param iface Ethernet interface.
+     *
+     * @return {@code true} if connected, {@code false} otherwise.
+     */
+    public boolean isConnected(@NonNull String iface) {
+        try {
+            return mService.isConnected(iface);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Resets the given Ethernet interface.
+     *
+     * @param iface Ethernet interface.
+     */
+    public void resetInterface(@NonNull String iface) {
+        try {
+            mService.resetInterface(iface);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Reads the MAC address of the given Ethernet interface.
+     *
+     * @param iface Ethernet interface.
+     *
+     * @return The MAC address or {@code null} if could not be read.
+     */
+    @Nullable
+    public String getMacAddress(@NonNull String iface) {
+        try {
+            return mService.getMacAddress(iface);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Enables or disables the given Ethernet interface.
+     *
+     * @param iface Ethernet interface.
+     * @param enable {@code true} to enable it, {@code false} to disable it.
+     */
+    public void setEnabled(@NonNull String iface, boolean enable) {
+        try {
+            mService.setEnabled(iface, enable);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
+    }
+
+    /**
+     * Returns whether the given Ethernet interface is enabled or not.
+     *
+     * @param iface Ethernet interface.
+     *
+     * @return {@code true} if the interface is enabled, {@code false}
+     *         otherwise.
+     */
+    public boolean isEnabled(@NonNull String iface) {
+        try {
+            return mService.isEnabled(iface);
+        } catch (RemoteException e) {
+            throw e.rethrowFromSystemServer();
+        }
     }
 }
