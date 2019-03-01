@@ -6431,6 +6431,22 @@ message MetricsEvent {
 
     // ---- End Q Constants, all Q constants go above this line ----
 
+    // OPEN: Settings > Ethernet
+    // CATEGORY: SETTINGS
+    // OS: O
+    ETHERNET = 1554;
+
+    // ACTION: Settings > Ethernet > Toggle off
+    //   SUBTYPE: true if connected to network before toggle, false if not
+    // CATEGORY: SETTINGS
+    // OS: O
+    ACTION_ETHERNET_OFF = 1555;
+
+    // ACTION: Settings > Ethernet > Toggle on
+    // CATEGORY: SETTINGS
+    // OS: O
+    ACTION_ETHERNET_ON = 1556;
+
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
   }
