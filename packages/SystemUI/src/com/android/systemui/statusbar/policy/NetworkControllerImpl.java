@@ -31,6 +31,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
+import android.net.EthernetProperties;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkScoreManager;
@@ -38,8 +39,13 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.INetworkManagementService;
 import android.os.Looper;
+import android.os.RemoteException;
 import android.os.PersistableBundle;
+import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.telephony.CarrierConfigManager;
 import android.telephony.CellSignalStrength;
@@ -305,6 +311,37 @@ public class NetworkControllerImpl extends BroadcastReceiver
                 doUpdateMobileControllers();
             }
         };
+
+        checkEthernetInterfaces();
+    }
+
+    /**
+     * Checks the value of the Ethernet enabled property for each interface
+     * to update its status.
+     */
+    private void checkEthernetInterfaces() {
+        IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        INetworkManagementService nmService = INetworkManagementService.Stub.asInterface(b);
+
+        String sIfaceMatch = mContext.getResources().getString(
+                com.android.internal.R.string.config_ethernet_iface_regex);
+
+        try {
+            // Get the Ethernet interfaces.
+            for (String iface : nmService.listInterfaces()) {
+                if (iface.matches(sIfaceMatch)) {
+                    // Search the Ethernet enabled property in the system properties.
+                    String prop = SystemProperties.get(String.format(EthernetProperties.ETH_PROPERTY, iface));
+                    // If it exists and its value is 0, turn off the Ethernet interface.
+                    if (prop != null && prop.equals(EthernetProperties.ETH_PROPERTY_DISABLED)) {
+                        nmService.setInterfaceDown(iface);
+                        Log.d(TAG, "Ethernet interface " + iface + " turned off");
+                    }
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private final Runnable mClearForceValidated = () -> {
