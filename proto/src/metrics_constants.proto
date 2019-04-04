@@ -6447,6 +6447,22 @@ message MetricsEvent {
     // OS: O
     ACTION_ETHERNET_ON = 1556;
 
+    // OPEN: Settings > Remote Manager
+    // CATEGORY: SETTINGS
+    // OS: O
+    CLOUD_CONNECTOR = 1557;
+
+    // ACTION: Settings > Remote Manager > Toggle off
+    //   SUBTYPE: true if connected to Remote Manager before toggle, false if not
+    // CATEGORY: SETTINGS
+    // OS: O
+    ACTION_CC_OFF = 1558;
+
+    // ACTION: Settings > Remote Manager > Toggle on
+    // CATEGORY: SETTINGS
+    // OS: O
+    ACTION_CC_ON = 1559;
+
     // Add new aosp constants above this line.
     // END OF AOSP CONSTANTS
   }
