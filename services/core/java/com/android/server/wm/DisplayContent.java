@@ -400,6 +400,9 @@ class DisplayContent extends WindowContainer<DisplayContent.DisplayChildWindowCo
 
     private MagnificationSpec mMagnificationSpec;
 
+    /** Caches the value whether told display manager that we have content. */
+    private boolean mLastHasContent;
+
     private final Consumer<WindowState> mUpdateWindowsForAnimator = w -> {
         WindowStateAnimator winAnimator = w.mWinAnimator;
         final AppWindowToken atoken = w.mAppToken;
@@ -2916,8 +2919,9 @@ class DisplayContent extends WindowContainer<DisplayContent.DisplayChildWindowCo
         forAllWindows(mApplySurfaceChangesTransaction, true /* traverseTopToBottom */);
         prepareSurfaces();
 
+        mLastHasContent = mTmpApplySurfaceChangesTransactionState.displayHasContent;
         mService.mDisplayManagerInternal.setDisplayProperties(mDisplayId,
-                mTmpApplySurfaceChangesTransactionState.displayHasContent,
+                mLastHasContent,
                 mTmpApplySurfaceChangesTransactionState.preferredRefreshRate,
                 mTmpApplySurfaceChangesTransactionState.preferredModeId,
                 true /* inTraversal, must call performTraversalInTrans... below */);
@@ -3699,13 +3703,19 @@ class DisplayContent extends WindowContainer<DisplayContent.DisplayChildWindowCo
                         .show(mSplitScreenDividerAnchor);
                 scheduleAnimation();
             } else {
-                mAppAnimationLayer.destroy();
+                // At this time mBoostedAppAnimationLayer may be used for animating,
+                // and ResizeableActivity is in it. mBoostedAppAnimationLayer.destroy()
+                // can also destroy the surface of ResizeableActivity, but the surface will
+                // be used after. So change to use transaction to call destroy to delay it,
+                // and ResizeableActivity is not in mBoostedAppAnimationLayer.
+                getPendingTransaction()
+                        .destroy(mAppAnimationLayer)
+                        .destroy(mBoostedAppAnimationLayer)
+                        .destroy(mHomeAppAnimationLayer)
+                        .destroy(mSplitScreenDividerAnchor);
                 mAppAnimationLayer = null;
-                mBoostedAppAnimationLayer.destroy();
                 mBoostedAppAnimationLayer = null;
-                mHomeAppAnimationLayer.destroy();
                 mHomeAppAnimationLayer = null;
-                mSplitScreenDividerAnchor.destroy();
                 mSplitScreenDividerAnchor = null;
             }
         }
@@ -4051,5 +4061,12 @@ class DisplayContent extends WindowContainer<DisplayContent.DisplayChildWindowCo
      */
     private boolean canUpdateImeTarget() {
         return mDeferUpdateImeTargetCount == 0;
+    }
+
+    /**
+     * @return Cached value whether we told display manager that we have content.
+     */
+    boolean getLastHasContent() {
+        return mLastHasContent;
     }
 }

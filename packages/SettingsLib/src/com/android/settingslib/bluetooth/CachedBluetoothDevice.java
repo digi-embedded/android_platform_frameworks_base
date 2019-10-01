@@ -143,8 +143,8 @@ public class CachedBluetoothDevice implements Comparable<CachedBluetoothDevice> 
 
     void onProfileStateChanged(LocalBluetoothProfile profile, int newProfileState) {
         if (Utils.D) {
-            Log.d(TAG, "onProfileStateChanged: profile " + profile +
-                    " newProfileState " + newProfileState);
+            Log.d(TAG, "onProfileStateChanged: profile " + profile + ", device=" + mDevice
+                    + ", newProfileState " + newProfileState);
         }
         if (mLocalAdapter.getBluetoothState() == BluetoothAdapter.STATE_TURNING_OFF)
         {
@@ -222,6 +222,10 @@ public class CachedBluetoothDevice implements Comparable<CachedBluetoothDevice> 
 
         mConnectAttempted = SystemClock.elapsedRealtime();
         connectWithoutResettingTimer(connectAllProfiles);
+    }
+
+    public boolean isHearingAidDevice() {
+        return mHiSyncId != BluetoothHearingAid.HI_SYNC_ID_INVALID;
     }
 
     void onBondingDockConnect() {
@@ -1211,5 +1215,13 @@ public class CachedBluetoothDevice implements Comparable<CachedBluetoothDevice> 
         else {
             return false;
         }
+    }
+    /**
+     * @return {@code true} if {@code cachedBluetoothDevice} is Hearing Aid device
+     */
+    public boolean isConnectedHearingAidDevice() {
+        HearingAidProfile hearingAidProfile = mProfileManager.getHearingAidProfile();
+        return hearingAidProfile != null && hearingAidProfile.getConnectionStatus(mDevice) ==
+                BluetoothProfile.STATE_CONNECTED;
     }
 }

@@ -308,6 +308,12 @@ public final class SystemServer {
 
         mRuntimeStartElapsedTime = SystemClock.elapsedRealtime();
         mRuntimeStartUptime = SystemClock.uptimeMillis();
+        if ("zygote_auto".equals(SystemProperties.get("ro.zygote"))) {
+            isAndroidAuto = true;
+        }
+
+        if (isAndroidAuto)
+            SystemProperties.set("vendor.all.system_server.start", "1");
     }
 
     private void run() {
@@ -771,7 +777,10 @@ public final class SystemServer {
         boolean isWatch = context.getPackageManager().hasSystemFeature(
                 PackageManager.FEATURE_WATCH);
 
-        if ("zygote_auto".equals(SystemProperties.get("ro.zygote"))) {
+        boolean enableVrService = context.getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_VR_MODE_HIGH_PERFORMANCE);
+
+	if ("zygote_auto".equals(SystemProperties.get("ro.zygote"))) {
             isAndroidAuto = true;
         }
 
@@ -908,7 +917,7 @@ public final class SystemServer {
                 traceLog.traceEnd();
             }, START_HIDL_SERVICES);
 
-            if (!isWatch) {
+            if (!isWatch && enableVrService) {
                 traceBeginAndSlog("StartVrManagerService");
                 mSystemServiceManager.startService(VrManagerService.class);
                 traceEnd();

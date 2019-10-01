@@ -53,12 +53,16 @@ import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.UserManagerInternal;
 import android.os.UserManagerInternal.UserRestrictionsListener;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
+import android.text.TextUtils;
+import android.util.FeatureFlagUtils;
+import android.util.Log;
 import android.util.Slog;
 import android.util.StatsLog;
 
@@ -74,6 +78,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import android.os.SystemProperties;
 
 
 class BluetoothManagerService extends IBluetoothManager.Stub {
@@ -201,6 +206,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private int mState;
     private final BluetoothHandler mHandler;
     private int mErrorRecoveryRetryCounter;
+    private int mRestartRetryCounter;
     private final int mSystemUiUid;
 
     // Save a ProfileServiceConnections object for each of the bound
@@ -380,11 +386,21 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         mAddress = null;
         mName = null;
         mErrorRecoveryRetryCounter = 0;
+        mRestartRetryCounter = 0;
         mContentResolver = context.getContentResolver();
         // Observe BLE scan only mode settings change.
         registerForBleScanModeChange();
         mCallbacks = new RemoteCallbackList<IBluetoothManagerCallback>();
         mStateChangeCallbacks = new RemoteCallbackList<IBluetoothStateChangeCallback>();
+
+        // TODO: We need a more generic way to initialize the persist keys of FeatureFlagUtils
+        boolean isHearingAidEnabled;
+        String value = SystemProperties.get(FeatureFlagUtils.PERSIST_PREFIX + FeatureFlagUtils.HEARING_AID_SETTINGS);
+        if (!TextUtils.isEmpty(value)) {
+            isHearingAidEnabled = Boolean.parseBoolean(value);
+            Log.v(TAG, "set feature flag HEARING_AID_SETTINGS to " + isHearingAidEnabled);
+            FeatureFlagUtils.setEnabled(context, FeatureFlagUtils.HEARING_AID_SETTINGS, isHearingAidEnabled);
+        }
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_LOCAL_NAME_CHANGED);
@@ -1447,6 +1463,12 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
 
         @Override
         public void handleMessage(Message msg) {
+            if ("zygote_auto".equals(SystemProperties.get("ro.zygote"))) {
+                if (!"1".equals(SystemProperties.get("vendor.all.setup_main.ready"))) {
+                    mHandler.sendMessageDelayed(mHandler.obtainMessage(msg.what, msg.arg1, msg.arg2, msg.obj), 100);
+                    return;
+                }
+            }
             switch (msg.what) {
                 case MESSAGE_GET_NAME_AND_ADDRESS:
                     if (DBG) {
@@ -1721,6 +1743,10 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                             Slog.w(TAG, "bluetooth is recovered from error");
                             mErrorRecoveryRetryCounter = 0;
                         }
+                        if (mRestartRetryCounter != 0) {
+                            Slog.w(TAG, "bluetooth is started");
+                            mRestartRetryCounter = 0;
+                        }
                     }
                     break;
                 }
@@ -1781,11 +1807,18 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     /* Enable without persisting the setting as
                      it doesnt change when IBluetooth
                      service restarts */
-                    mEnable = true;
-                    addActiveLog(BluetoothProtoEnums.ENABLE_DISABLE_REASON_RESTARTED,
-                            mContext.getPackageName(), true);
-                    handleEnable(mQuietEnable);
-                    break;
+                    if (mRestartRetryCounter++ < MAX_ERROR_RESTART_RETRIES) {
+                        Slog.d(TAG, "MESSAGE_RESTART_BLUETOOTH_SERVICE mRestartRetryCounter= "+ mRestartRetryCounter );
+                        mEnable = true;
+                        addActiveLog(BluetoothProtoEnums.ENABLE_DISABLE_REASON_RESTARTED,
+                                mContext.getPackageName(), true);
+                        handleEnable(mQuietEnable);
+                        break;
+                    } else {
+                       Slog.d(TAG, "Bluetooth is dead,no more retry to restart." );
+                       mEnable = false;
+                       handleDisable();
+                    }
                 }
                 case MESSAGE_TIMEOUT_BIND: {
                     Slog.e(TAG, "MESSAGE_TIMEOUT_BIND");
