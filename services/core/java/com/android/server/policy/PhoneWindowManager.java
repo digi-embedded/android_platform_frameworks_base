@@ -290,8 +290,10 @@ import com.android.server.wm.DisplayFrames;
 import com.android.server.wm.WindowManagerInternal;
 import com.android.server.wm.WindowManagerInternal.AppTransitionListener;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -305,6 +307,8 @@ import java.util.List;
  */
 public class PhoneWindowManager implements WindowManagerPolicy {
     static final String TAG = "WindowManager";
+    static final String MCA_CANCEL_POWER_OFF_FILE = "/sys/devices/platform/5a800000.i2c/i2c-0/0-0063/mca-cc8x-pwrkey/mca_cancel_pwroff";
+    static final String MCA_CANCEL_POWER_OFF_STRING = "CANCEL PWROFF";
     static final boolean DEBUG = false;
     static final boolean localLOGV = false;
     static final boolean DEBUG_INPUT = false;
@@ -1479,6 +1483,33 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mPowerKeyPressCounter = 0;
         if (mPowerKeyWakeLock.isHeld()) {
             mPowerKeyWakeLock.release();
+        }
+        /*
+         * ADK4A-1731
+         * --------------------------------------------------------------------------
+         * In ConnectCore8x platform, the MCA interprets the long power key
+         * press as a shutdown action and starts the power-off sequence. If after
+         * around 20 seconds the device is not shutdown, the MCA watchdog resets
+         * the MCA and the device automatically shuts down.
+         *
+         * Android requirements are a bit different. Android needs to capture the
+         * long power key press in order to display the global actions menu, but
+         * that does not mean that the device should be shut-down at that moment.
+         * For this reason, whenever the long power key process in Android finishes,
+         * we need to cancel the MCA power-off sequence to avoid the module to
+         * automatically shutdown. It is the user the one that decides what to do
+         * (shut-down, reboot, etc.) after the long key press is captured and the
+         * global actions menu is displayed.
+         *
+         * In order to cancel the power-off sequence, we need to write a specific
+         * string to one of the MCA sys file system entries as follows:
+         *
+         * echo "CANCEL PWROFF" > /sys/devices/platform/5a800000.i2c/i2c-0/0-0063/mca-cc8x-pwrkey/mca_cancel_pwroff
+         */
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(MCA_CANCEL_POWER_OFF_FILE))) {
+            writer.write(MCA_CANCEL_POWER_OFF_STRING);
+        } catch (IOException e) {
+            Slog.w(TAG, "Could not stop MCA power-off sequence: " + e.getMessage());
         }
     }
 
