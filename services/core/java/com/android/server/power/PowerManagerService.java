@@ -41,6 +41,8 @@ import android.annotation.RequiresPermission;
 import android.annotation.UserIdInt;
 import android.app.ActivityManager;
 import android.app.SynchronousUserSwitchObserver;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.app.compat.CompatChanges;
 import android.compat.annotation.ChangeId;
 import android.compat.annotation.EnabledSince;
@@ -62,6 +64,7 @@ import android.hardware.display.DisplayManagerInternal;
 import android.hardware.power.Boost;
 import android.hardware.power.Mode;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.BatteryManagerInternal;
 import android.os.BatterySaverPolicyConfig;
@@ -252,6 +255,9 @@ public final class PowerManagerService extends SystemService
     // System property for last reboot reason
     private static final String SYSTEM_PROPERTY_REBOOT_REASON = "sys.boot.reason";
 
+    // System Property indicating whether interfaces should be disabled on suspend.
+    private static final String SYSTEM_PROPERTY_DISABLE_IFACES_SUSPEND = "ro.boot.disable_ifaces_suspend";
+
     // Possible reasons for shutting down or reboot for use in
     // SYSTEM_PROPERTY_REBOOT_REASON(sys.boot.reason) which is set by bootstat
     private static final String REASON_SHUTDOWN = "shutdown";
@@ -344,6 +350,9 @@ public final class PowerManagerService extends SystemService
     private SettingsObserver mSettingsObserver;
     private DreamManagerInternal mDreamManager;
     private LogicalLight mAttentionLight;
+    private WifiManager mWifiManager;
+    private BluetoothManager mBluetoothManager;
+    private BluetoothAdapter mBluetoothAdapter;
 
     private final InattentiveSleepWarningController mInattentiveSleepWarningOverlayController;
     private final AmbientDisplaySuppressionController mAmbientDisplaySuppressionController;
@@ -693,6 +702,12 @@ public final class PowerManagerService extends SystemService
 
     // True if double tap to wake is enabled
     private boolean mDoubleTapWakeEnabled;
+
+    // Store Wifi enable status before going to suspend
+    private boolean mWifiEnabled;
+
+    // Store Bluetooth enable status before going to suspend
+    private boolean mBluetoothEnabled;
 
     // True if we in the process of performing a forceSuspend
     private boolean mForceSuspendActive;
@@ -2152,8 +2167,42 @@ public final class PowerManagerService extends SystemService
         if (mForceSuspendActive || !mSystemReady) {
             return;
         }
+
+        if (powerGroup.getWakefulnessLocked() == WAKEFULNESS_ASLEEP) {
+            // Check if interfaces should be enabled on wake up.
+            enableInterfacesOnWakeup();
+        }
+
         powerGroup.wakeUpLocked(eventTime, reason, details, uid, opPackageName, opUid,
                 LatencyTracker.getInstance(mContext));
+    }
+
+    private void enableInterfacesOnWakeup() {
+        // Read configured static preference.
+        boolean disableOnSuspend = SystemProperties.getBoolean(SYSTEM_PROPERTY_DISABLE_IFACES_SUSPEND, true);
+        if (!disableOnSuspend)
+            return;
+        // Check if Wi-Fi interface should be enabled.
+        if (mWifiEnabled) {
+            if (mWifiManager == null)
+                mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+            // Enable Wi-Fi interface.
+            Slog.i(TAG, "Enabling Wi-Fi interface on wake up...");
+            mWifiManager.setWifiEnabled(true);
+        }
+        // Check if Bluetooth interface should be enabled.
+        if (mBluetoothEnabled) {
+            if (mBluetoothAdapter == null) {
+                if (mBluetoothManager == null)
+                    mBluetoothManager = (BluetoothManager)mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+                mBluetoothAdapter = (BluetoothAdapter)mBluetoothManager.getAdapter();
+            }
+            // Enable Bluetooth interface.
+            if (mBluetoothAdapter != null) {
+                Slog.i(TAG, "Enabling Bluetooth interface on wake up...");
+                mBluetoothAdapter.enable();
+            }
+        }
     }
 
     @GuardedBy("mLock")
@@ -2182,7 +2231,57 @@ public final class PowerManagerService extends SystemService
             return false;
         }
 
+        if (reason == PowerManager.GO_TO_SLEEP_REASON_SLEEP_BUTTON
+                || reason  == PowerManager.GO_TO_SLEEP_REASON_POWER_BUTTON) {
+            // Check if interfaces should be disabled on suspend.
+            disableInterfacesOnSuspend();
+        }
+
         return powerGroup.dozeLocked(eventTime, uid, reason);
+    }
+
+    private void disableInterfacesOnSuspend() {
+        // Read configured static preference.
+        boolean disableOnSuspend = SystemProperties.getBoolean(SYSTEM_PROPERTY_DISABLE_IFACES_SUSPEND, true);
+        if (!disableOnSuspend)
+            return;
+        // Check if Wi-Fi interface should be disabled.
+        if (mWifiManager == null)
+            mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        mWifiEnabled = mWifiManager.isWifiEnabled();
+        if (mWifiEnabled) {
+            // Disable Wi-Fi interface.
+            Slog.i(TAG, "Disabling Wi-Fi interface on suspend...");
+            mWifiManager.setWifiEnabled(false);
+            // Wait until Wi-Fi is fully disabled.
+            long deadline = System.currentTimeMillis() + 5000;  // Wait a maximum of 5 seconds.
+            while (mWifiManager.getWifiState() != WifiManager.WIFI_STATE_DISABLED && deadline > System.currentTimeMillis()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) { }
+            }
+        }
+        // Check if Bluetooth interface should be disabled.
+        if (mBluetoothAdapter == null) {
+            if (mBluetoothManager == null)
+                mBluetoothManager = (BluetoothManager)mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+            mBluetoothAdapter = (BluetoothAdapter)mBluetoothManager.getAdapter();
+        }
+        if (mBluetoothAdapter == null)
+            return;
+        mBluetoothEnabled = mBluetoothAdapter.isEnabled();
+        if (mBluetoothEnabled) {
+            // Disable Bluetooth interface.
+            Slog.i(TAG, "Disabling Bluetooth interface on suspend...");
+            mBluetoothAdapter.disable();
+            // Wait until Bluetooth is fully disabled.
+            long deadline = System.currentTimeMillis() + 5000;  // Wait a maximum of 5 seconds.
+            while (mBluetoothAdapter.isEnabled() && deadline > System.currentTimeMillis()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) { }
+            }
+        }
     }
 
     @GuardedBy("mLock")
