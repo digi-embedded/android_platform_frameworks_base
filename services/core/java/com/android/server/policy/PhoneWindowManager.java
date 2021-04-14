@@ -128,6 +128,7 @@ import android.media.AudioSystem;
 import android.media.IAudioService;
 import android.media.session.MediaSessionLegacyHelper;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.FactoryTest;
 import android.os.Handler;
@@ -235,7 +236,8 @@ import java.util.List;
  */
 public class PhoneWindowManager implements WindowManagerPolicy {
     static final String TAG = "WindowManager";
-    static final String MCA_CANCEL_POWER_OFF_FILE = "/sys/devices/platform/5a800000.i2c/i2c-0/0-0063/mca-cc8x-pwrkey/mca_cancel_pwroff";
+    static final String MCA_CANCEL_POWER_OFF_FILE_8X = "/sys/devices/platform/bus@5a000000/5a800000.i2c/i2c-0/0-0063/mca-cc8x-pwrkey/mca_cancel_pwroff";
+    static final String MCA_CANCEL_POWER_OFF_FILE_8M = "/sys/devices/platform/soc@0/soc@0:bus@30800000/30a20000.i2c/i2c-0/0-0063/mca-cc8m-pwrkey/mca_cancel_pwroff";
     static final String MCA_CANCEL_POWER_OFF_STRING = "CANCEL PWROFF";
     static final boolean localLOGV = false;
     static final boolean DEBUG_INPUT = false;
@@ -1055,7 +1057,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         /*
          * ADK4A-1731
          * --------------------------------------------------------------------------
-         * In ConnectCore8x platform, the MCA interprets the long power key
+         * In ConnectCore8 platforms, the MCA interprets the long power key
          * press as a shutdown action and starts the power-off sequence. If after
          * around 20 seconds the device is not shutdown, the MCA watchdog resets
          * the MCA and the device automatically shuts down.
@@ -1070,14 +1072,21 @@ public class PhoneWindowManager implements WindowManagerPolicy {
          * global actions menu is displayed.
          *
          * In order to cancel the power-off sequence, we need to write a specific
-         * string to one of the MCA sys file system entries as follows:
-         *
-         * echo "CANCEL PWROFF" > /sys/devices/platform/5a800000.i2c/i2c-0/0-0063/mca-cc8x-pwrkey/mca_cancel_pwroff
+         * string "CANCEL PWROFF" to the platform specific "mca_cancel_pwroff" file
+         * in the sysfs.
          */
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(MCA_CANCEL_POWER_OFF_FILE))) {
-            writer.write(MCA_CANCEL_POWER_OFF_STRING);
-        } catch (IOException e) {
-            Slog.w(TAG, "Could not stop MCA power-off sequence: " + e.getMessage());
+        String mcaCancelPwrOffFile = null;
+        if (Build.DEVICE.equals("ccimx8xsbcpro")) {
+            mcaCancelPwrOffFile = new String(MCA_CANCEL_POWER_OFF_FILE_8X);
+        } else if (Build.DEVICE.equals("ccimx8mmdvk")) {
+            mcaCancelPwrOffFile = new String(MCA_CANCEL_POWER_OFF_FILE_8M);
+        }
+        if (mcaCancelPwrOffFile != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(mcaCancelPwrOffFile))) {
+                writer.write(MCA_CANCEL_POWER_OFF_STRING);
+            } catch (IOException e) {
+                Slog.w(TAG, "Could not stop MCA power-off sequence: " + e.getMessage());
+            }
         }
     }
 
