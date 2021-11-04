@@ -34,6 +34,7 @@ import android.hardware.display.DisplayManagerInternal.DisplayPowerRequest;
 import android.hardware.power.V1_0.PowerHint;
 import android.metrics.LogMaker;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.BatteryManagerInternal;
 import android.os.Binder;
@@ -83,6 +84,7 @@ import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.os.BackgroundThread;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.DumpUtils;
+import com.android.internal.util.WifiChipUtils;
 import com.android.server.EventLogTags;
 import com.android.server.LockGuard;
 import com.android.server.RescueParty;
@@ -240,6 +242,7 @@ public final class PowerManagerService extends SystemService
     private SettingsObserver mSettingsObserver;
     private DreamManagerInternal mDreamManager;
     private Light mAttentionLight;
+    private WifiManager mWifiManager;
 
     private final Object mLock = LockGuard.installNewLock(LockGuard.INDEX_POWER);
 
@@ -560,6 +563,9 @@ public final class PowerManagerService extends SystemService
 
     // True if we are currently in VR Mode.
     private boolean mIsVrModeEnabled;
+
+    // Store Wifi enable status before going to suspend
+    private boolean mWifiEnabled;
 
     /**
      * All times are in milliseconds. These constants are kept synchronized with the system
@@ -1412,6 +1418,8 @@ public final class PowerManagerService extends SystemService
                 case WAKEFULNESS_ASLEEP:
                     Slog.i(TAG, "Waking up from sleep (uid=" + reasonUid + " reason=" + reason
                             + ")...");
+                    // Check if Wi-Fi should be enabled on wake up.
+                    enableWifiOnWakeup();
                     break;
                 case WAKEFULNESS_DREAMING:
                     Slog.i(TAG, "Waking up from dream (uid=" + reasonUid + " reason=" + reason
@@ -1433,6 +1441,27 @@ public final class PowerManagerService extends SystemService
             Trace.traceEnd(Trace.TRACE_TAG_POWER);
         }
         return true;
+    }
+
+    private void enableWifiOnWakeup() {
+        // Check if the Wi-Fi chip is a QCA.
+        if (!WifiChipUtils.isQCA6564Chip())
+            return;
+        // Load QCA module.
+        Slog.i(TAG, "Loading QCA module on wake up...");
+        try {
+            WifiChipUtils.loadQCAModule();
+            // Check if Wi-Fi interface should be enabled.
+            if (mWifiEnabled) {
+                if (mWifiManager == null)
+                    mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+                // Enable Wi-Fi interface.
+                Slog.i(TAG, "Enabling Wi-Fi interface on wake up...");
+                mWifiManager.setWifiEnabled(true);
+            }
+        } catch (IOException ex) {
+            Slog.e(TAG, "Error loading QCA module: " + ex.getMessage());
+        }
     }
 
     private void goToSleepInternal(long eventTime, int reason, int flags, int uid) {
@@ -1461,6 +1490,7 @@ public final class PowerManagerService extends SystemService
 
         Trace.traceBegin(Trace.TRACE_TAG_POWER, "goToSleep");
         try {
+            Slog.i(TAG, "Going to sleep, reason: " + reason);
             switch (reason) {
                 case PowerManager.GO_TO_SLEEP_REASON_DEVICE_ADMIN:
                     Slog.i(TAG, "Going to sleep due to device administration policy "
@@ -1474,6 +1504,8 @@ public final class PowerManagerService extends SystemService
                     break;
                 case PowerManager.GO_TO_SLEEP_REASON_POWER_BUTTON:
                     Slog.i(TAG, "Going to sleep due to power button (uid " + uid +")...");
+                    // Check if Wi-Fi should be disabled on suspend.
+                    disableWifiOnSuspend();
                     break;
                 case PowerManager.GO_TO_SLEEP_REASON_SLEEP_BUTTON:
                     Slog.i(TAG, "Going to sleep due to sleep button (uid " + uid +")...");
@@ -1514,6 +1546,34 @@ public final class PowerManagerService extends SystemService
             Trace.traceEnd(Trace.TRACE_TAG_POWER);
         }
         return true;
+    }
+
+    private void disableWifiOnSuspend() {
+        // Check if the Wi-Fi chip is a QCA.
+        if (!WifiChipUtils.isQCA6564Chip())
+            return;
+        // Check if Wi-Fi interface should be disabled.
+        if (mWifiManager == null)
+            mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+        mWifiEnabled = mWifiManager.isWifiEnabled();
+        if (mWifiEnabled) {
+            // Disable Wi-Fi interface.
+            Slog.i(TAG, "Disabling Wi-Fi interface on suspend...");
+            mWifiManager.setWifiEnabled(false);
+            // Wait until Wi-Fi is fully disabled.
+            long deadline = System.currentTimeMillis() + 5000;  // Wait a maximum of 5 seconds.
+            while (mWifiManager.getWifiState() != WifiManager.WIFI_STATE_DISABLED && deadline > System.currentTimeMillis()) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) { }
+            }
+        }
+        // Unload QCA module.
+        try {
+            WifiChipUtils.unloadQCAModule();
+        } catch (IOException ex) {
+            Slog.e(TAG, "Error unloading QCA module: " + ex.getMessage());
+        }
     }
 
     private void napInternal(long eventTime, int uid) {
