@@ -158,6 +158,7 @@ import android.media.AudioManager;
 import android.media.AudioSystem;
 import android.media.IAudioService;
 import android.media.session.MediaSessionLegacyHelper;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -232,6 +233,7 @@ import com.android.internal.policy.IShortcutService;
 import com.android.internal.policy.PhoneWindow;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.ScreenShapeHelper;
+import com.android.internal.util.WifiChipUtils;
 import com.android.internal.widget.PointerLocationView;
 import com.android.server.GestureLauncherService;
 import com.android.server.LocalServices;
@@ -317,6 +319,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final int SHORT_PRESS_SLEEP_GO_TO_SLEEP_AND_GO_HOME = 1;
 
     static final int PENDING_KEY_NULL = -1;
+
+    static final long WIFI_ENABLE_TIMEOUT = 7000;
 
     // Controls navigation bar opacity depending on which workspace stacks are currently
     // visible.
@@ -421,6 +425,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     AppOpsManager mAppOpsManager;
     private boolean mHasFeatureWatch;
     private boolean mHasFeatureLeanback;
+    private WifiManager mWifiManager;
 
     // Assigned on main thread, accessed on UI thread
     volatile VrManagerInternal mVrManagerInternal;
@@ -7361,6 +7366,81 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mImmersiveModeConfirmation.systemReady();
 
         mAutofillManagerInternal = LocalServices.getService(AutofillManagerInternal.class);
+
+        // Modules using QCA564 chip require some Wi-Fi tweaks during boot. Wi-Fi interface
+        // won't establish a correct connection with any access point until the interface
+        // is turned on for a second time. This piece of code takes care of performing a
+        // single Wi-Fi toggle if the device boots without Wi-Fi active and two toggles
+        // if the Wi-Fi interface should be enabled on boot.
+        if (WifiChipUtils.isQCA6564Chip()) {
+            Slog.i(TAG, "[Digi] Toggling Wi-Fi interface...");
+            mWifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
+            Thread toggleWifiThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    boolean mWifiEnabled = mWifiManager.isWifiEnabled() | (getPersistedWifiState() != 0);
+                    toggleWifiAndWait(!mWifiEnabled);
+                    // Wait until boot completes.
+                    Slog.i(TAG, "[Digi] Waiting until boot completes...");
+                    while (! "1".equals(SystemProperties.get("sys.boot_completed"))) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ignore) { }
+                    }
+                    if (mWifiEnabled) {
+                        toggleWifiAndWait(true);
+                        // Leave interface on for two seconds.
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ignore) { }
+                        // Wi-Fi was enabled on boot, so perform a second toggle of the interface.
+                        toggleWifiAndWait(false);
+                        // Unload QCA module.
+                        try {
+                            WifiChipUtils.unloadQCAModule();
+                        } catch (IOException ex) {
+                            Slog.e(TAG, "Error unloading QCA module: " + ex.getMessage());
+                        }
+                        // Leave interface off for three seconds.
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException ignore) { }
+                        // Load QCA module.
+                        try {
+                            WifiChipUtils.loadQCAModule();
+                        } catch (IOException ex) {
+                            Slog.e(TAG, "Error loading QCA module: " + ex.getMessage());
+                        }
+                        toggleWifiAndWait(true);
+                    } else
+                        toggleWifiAndWait(false);
+                }
+            });
+            toggleWifiThread.start();
+        }
+    }
+
+    private void toggleWifiAndWait(boolean enable) {
+        Slog.i(TAG, String.format("[Digi] %s Wi-Fi...", enable ? "Enabling" : "Disabling"));
+        mWifiManager.setWifiEnabled(enable);
+        // Wait until Wi-Fi is fully enabled/disabled.
+        long deadline = System.currentTimeMillis() + WIFI_ENABLE_TIMEOUT;  // Wait a maximum timeout.
+        int targetState = enable ? WifiManager.WIFI_STATE_ENABLED : WifiManager.WIFI_STATE_DISABLED;
+        while (mWifiManager.getWifiState() != targetState && deadline > System.currentTimeMillis()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignore) { }
+        }
+    }
+
+    private int getPersistedWifiState() {
+        final ContentResolver cr = mContext.getContentResolver();
+        try {
+            return Settings.Global.getInt(cr, Settings.Global.WIFI_ON);
+        } catch (Settings.SettingNotFoundException e) {
+            Settings.Global.putInt(cr, Settings.Global.WIFI_ON, 0);
+            return 0;
+        }
     }
 
     /** {@inheritDoc} */
