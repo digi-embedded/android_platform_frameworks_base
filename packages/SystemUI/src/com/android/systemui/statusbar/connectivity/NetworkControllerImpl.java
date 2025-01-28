@@ -128,10 +128,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
      * not.
      *
      * <p>It has to be formatted in the following way:
-     * {@code persist.eth#.enabled}, where {@code #} is the number of the
+     * {@code persist.vendor.eth#.enabled}, where {@code #} is the number of the
      * interface.</p>
      */
-    private static final String ETH_PROPERTY = "persist.%s.enabled";
+    private static final String ETH_PROPERTY = "persist.vendor.%s.enabled";
 
     private final Context mContext;
     private final TelephonyManager mPhone;
