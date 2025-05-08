@@ -268,7 +268,7 @@ import java.util.function.Supplier;
 public class PhoneWindowManager implements WindowManagerPolicy {
     static final String TAG = "WindowManager";
     static final String MCA_CANCEL_POWER_OFF_FILE_8X = "/sys/devices/platform/bus@5a000000/5a800000.i2c/i2c-0/0-0063/mca-som-pwrkey/mca_cancel_pwroff";
-    static final String MCA_CANCEL_POWER_OFF_FILE_8M = "/sys/devices/platform/soc@0/soc@0:bus@30800000/30a20000.i2c/i2c-0/0-0063/mca-som-pwrkey/mca_cancel_pwroff";
+    static final String MCA_CANCEL_POWER_OFF_FILE_8M = "/sys/devices/platform/soc@0/30800000.bus/30a20000.i2c/i2c-0/0-0063/mca-som-pwrkey/mca_cancel_pwroff";
     static final String MCA_CANCEL_POWER_OFF_STRING = "CANCEL PWROFF";
     static final boolean localLOGV = false;
     static final boolean DEBUG_INPUT = false;
